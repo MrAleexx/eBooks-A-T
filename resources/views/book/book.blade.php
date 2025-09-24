@@ -6,13 +6,14 @@
     <section class="my-10 container mx-auto px-3">
         <h2 class="text-center text-2xl font-bold mb-10 uppercase">Mis Libros Comprados</h2>
 
-        @if(request()->has('success'))
-            <div id="successMessage" class="container mx-auto text-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        @if (request()->has('success'))
+            <div id="successMessage"
+                class="container mx-auto text-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
                 <p class="mb-3">
-    🎉 Tu compra se ha realizado correctamente.
-    <br>
-    Una vez enviado el mensaje, habilitaremos el libro de tu compra en la plataforma.
-</p>
+                    🎉 Tu compra se ha realizado correctamente.
+                    <br>
+                    Una vez enviado el mensaje, habilitaremos el libro de tu compra en la plataforma.
+                </p>
             </div>
         @endif
 
@@ -25,8 +26,8 @@
                         <!-- Imagen -->
                         <a href="{{ route('user.books.show', $item->book) }}" class="block">
                             <div class="relative">
-                                <img src="{{ $item->book->image ?? 'https://via.placeholder.com/150x200?text=Sin+imagen'  }}" alt="{{ $item->book->title }}"
-                                    class="w-full h-60 object-cover rounded-t-lg">
+                                <img src="{{ $item->book->image ?? 'https://via.placeholder.com/150x200?text=Sin+imagen' }}"
+                                    alt="{{ $item->book->title }}" class="w-full h-60 object-cover rounded-t-lg">
                                 <span
                                     class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
                                     Comprado

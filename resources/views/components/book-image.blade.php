@@ -11,7 +11,7 @@
 
 <div class="relative">
     <div class="overflow-hidden {{ $allClasses }}"> {{-- Contenedor que forza el tamaño --}}
-        <img src="{{ $imageSrc }}" alt="{{ $title }}" class="w-full h-full object-cover" {{-- Imagen dentro del contenedor --}}
+        <img src="{{ $imageSrc }}" alt="{{ $title }}" class="w-full h-full object-cover"
             onerror="this.onerror=null; this.classList.add('opacity-0'); this.parentElement.nextElementSibling?.classList.remove('hidden')">
     </div>
 
