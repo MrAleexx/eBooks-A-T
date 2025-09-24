@@ -14,16 +14,11 @@ use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
+    private const CART_EMPTY_MESSAGE = 'Tu carrito está vacío';
+    
     public function index()
     {
-        $cart = Session::get('cart', []);
-        $total = 0;
-
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-
-        return view('cart.index', compact('cart', 'total'));
+        return view('cart.index');
     }
 
     public function add(Request $request, Book $book)
@@ -52,40 +47,13 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Libro añadido al carrito');
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'quantity' => 'required|integer|min:1|max:5'
-        ]);
-
-        $cart = Session::get('cart', []);
-
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity'] = $request->quantity;
-            Session::put('cart', $cart);
-        }
-
-        return redirect()->back()->with('success', 'Carrito actualizado');
-    }
-
-    public function remove($id)
-    {
-        $cart = Session::get('cart', []);
-
-        if (isset($cart[$id])) {
-            unset($cart[$id]);
-            Session::put('cart', $cart);
-        }
-
-        return redirect()->back()->with('success', 'Libro eliminado del carrito');
-    }
-
+    
     public function checkout()
     {
         $cart = Session::get('cart', []);
 
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
         }
 
         $total = 0;
@@ -106,7 +74,7 @@ class CartController extends Controller
         $cart = Session::get('cart', []);
 
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
         }
 
         $order = Order::create([
@@ -150,7 +118,7 @@ class CartController extends Controller
     {
         $cart = Session::get('cart', []);
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
         }
 
         $total = 0;
@@ -164,7 +132,7 @@ class CartController extends Controller
     {
         $cart = Session::get('cart', []);
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
         }
 
         $total = 0;
@@ -178,7 +146,7 @@ class CartController extends Controller
     {
         $cart = Session::get('cart', []);
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
         }
 
         $total = 0;
@@ -192,7 +160,7 @@ class CartController extends Controller
     {
         $cart = Session::get('cart', []);
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
         }
 
         $total = 0;
@@ -212,7 +180,7 @@ class CartController extends Controller
 
         $cart = Session::get('cart', []);
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
         }
 
         $user = Auth::user();
