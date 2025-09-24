@@ -21,12 +21,18 @@ use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ClaimsController;
+use App\Policies\PrivacyPolicies;
 use Illuminate\Support\Facades\Route;
 
 // RUTAS PUBLICAS
 Route::get('/', HomeController::class)->name('bookmart');
 Route::get('/nuestros-libros', HomeBookController::class)->name('homebook');
 Route::get('/sobre-nosotros', HomeAboutController::class)->name('homeabout');
+
+Route::get('/politicas-privacidad', [PrivacyPolicies::class, 'policies'])->name('privacy_policies');
+Route::get('/politicas-de-cookie', [PrivacyPolicies::class, 'cookie'])->name('cookie');
+Route::get('/terminos-condiciones', [PrivacyPolicies::class, 'condicion'])->name('condicion');
+Route::get('/terminos-condiciones-promocionales', [PrivacyPolicies::class, 'promocional'])->name('promocional');
 
 Route::get('/contactanos', [HomeContactController::class, 'index'])->name('homecontact');
 Route::post('/contactanos', [HomeContactController::class, 'store'])->name('homecontact.store');
@@ -110,5 +116,4 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     })->name('index');
-
 });
