@@ -107,22 +107,55 @@ class CartController extends Controller
         }
 
         try {
-            $cart = $this->cartService->getCart();
-            $voucherPath = $request->file('voucher')->store('vouchers', 'public');
+            \Log::info('=== INICIANDO ENVIAR CORREO ===');
 
+            $cart = $this->cartService->getCart();
+            \Log::info('Carrito obtenido:', ['items_count' => count($cart)]);
+
+            $voucherPath = $request->file('voucher')->store('vouchers', 'public');
+            \Log::info('Voucher guardado:', ['path' => $voucherPath]);
+
+            // Crear la orden
             $order = $this->orderService->createOrder($cart, 'email', $voucherPath);
 
-            // Enviar email
-            Mail::to(auth()->user()->email)
-                ->send(new PedidoConfirmado($cart, auth()->user(), $voucherPath));
+            \Log::info('Orden creada:', [
+                'order_id' => $order->id ?? 'NO_ID',
+                'order_class' => get_class($order),
+                'order_data' => $order->toArray()
+            ]);
+
+            if (!$order || !$order->id) {
+                \Log::error('ERROR: La orden no tiene ID');
+                return redirect()->route('cart.index')
+                    ->with('error', 'Error al crear la orden. Por favor, contacta al soporte.');
+            }
+
+            // Calcular total para el email
+            $total = $this->cartService->getTotal();
+
+            // Intentar enviar email (pero no fallar si hay error)
+            try {
+                \Log::info('Enviando email...');
+                Mail::to(auth()->user()->email)
+                    ->send(new PedidoConfirmado($cart, auth()->user(), $voucherPath, $total));
+                \Log::info('Email enviado exitosamente');
+            } catch (\Exception $emailException) {
+                \Log::error('Error al enviar email, pero continuando con el proceso: ' . $emailException->getMessage());
+                // No re-lanzamos la excepción, continuamos con el proceso
+            }
 
             $this->cartService->clearCart();
+            \Log::info('Carrito limpiado, redirigiendo a orders.show');
 
-            return redirect()->route('bookmart')
-                ->with('success', '¡Pedido realizado con éxito! Se envió el comprobante por correo.');
+            return redirect()->route('orders.show', $order->id)
+                ->with('success', '¡Pedido realizado con éxito! ' .
+                    (isset($emailException) ? 'El pedido se creó pero hubo un error al enviar el correo.' : 'Revisa tu correo para la confirmación.'));
         } catch (\Exception $e) {
+            \Log::error('ERROR en enviarCorreo: ' . $e->getMessage());
+            \Log::error('TRACE: ' . $e->getTraceAsString());
+
             return redirect()->back()
-                ->with('error', 'Error al procesar el pedido. Por favor, intenta nuevamente.');
+                ->with('error', 'Error al procesar el pedido: ' . $e->getMessage());
         }
     }
 
