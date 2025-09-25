@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ClaimsController;
 use App\Policies\PrivacyPolicies;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 // RUTAS PUBLICAS
 Route::get('/', HomeController::class)->name('bookmart');
@@ -116,4 +117,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     })->name('index');
+});
+
+// En routes/web.php (temporalmente)
+Route::get('/debug-storage', function () {
+    $testFile = 'vouchers/test.jpg';
+
+    // Verificar rutas
+    echo "Storage path: " . storage_path('app/public/' . $testFile) . "<br>";
+    echo "Public path: " . public_path('storage/' . $testFile) . "<br>";
+    echo "Storage URL: " . Storage::url($testFile) . "<br>";
+
+    // Verificar si el symlink existe
+    echo "Symlink exists: " . (is_link(public_path('storage')) ? 'YES' : 'NO') . "<br>";
+    if (is_link(public_path('storage'))) {
+        echo "Symlink target: " . readlink(public_path('storage')) . "<br>";
+    }
 });

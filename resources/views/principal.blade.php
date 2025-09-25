@@ -6,7 +6,7 @@
     <!-- Hero Section Mejorada -->
     <section class="relative w-full h-[70vh] min-h-[500px] bg-gray-900 overflow-hidden">
         <!-- Imagen de fondo con overlay -->
-        <div class="absolute inset-0">
+        <div class="absolute inset-1">
             <img src="{{ asset('img/fondo_books.jpg') }}" alt="Biblioteca digital Grupo A&T"
                 class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-[#04050E]/80 to-[#272b30]/60"></div>

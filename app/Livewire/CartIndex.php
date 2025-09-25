@@ -4,123 +4,79 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
-use Illuminate\Support\Facades\Session;
+use App\Services\CartService;
 
 class CartIndex extends Component
 {
     public $cart = [];
     public $total = 0;
+    private CartService $cartService;
 
-    public function mount()
+    public function boot(CartService $cartService): void
     {
-        $this->updateCart();
+        $this->cartService = $cartService;
     }
 
-    public function updateCart()
+    public function mount(): void
     {
-        $this->cart = Session::get('cart', []);
-        $this->calculateTotal();
+        $this->updateCartState();
     }
 
-    public function calculateTotal()
+    public function increment(int $itemId): void
     {
-        $this->total = 0;
-        foreach ($this->cart as $item) {
-            $this->total += $item['price'] * $item['quantity'];
-        }
-    }
-
-    public function increment($itemId)
-    {
-        $cart = Session::get('cart', []);
+        $cart = $this->cartService->getCart();
 
         if (isset($cart[$itemId]) && $cart[$itemId]['quantity'] < 5) {
-            $cart[$itemId]['quantity']++;
-            Session::put('cart', $cart);
-            $this->updateCart();
-
-            $this->dispatch(
-                'show-notification',
-                type: 'success',
-                message: 'Cantidad aumentada'
-            );
+            $this->cartService->updateQuantity($itemId, $cart[$itemId]['quantity'] + 1);
+            $this->notifySuccess('Cantidad aumentada');
         }
     }
 
-    public function decrement($itemId)
+    public function decrement(int $itemId): void
     {
-        $cart = Session::get('cart', []);
+        $cart = $this->cartService->getCart();
 
         if (isset($cart[$itemId]) && $cart[$itemId]['quantity'] > 1) {
-            $cart[$itemId]['quantity']--;
-            Session::put('cart', $cart);
-            $this->updateCart();
-
-            $this->dispatch(
-                'show-notification',
-                type: 'success',
-                message: 'Cantidad disminuida'
-            );
+            $this->cartService->updateQuantity($itemId, $cart[$itemId]['quantity'] - 1);
+            $this->notifySuccess('Cantidad disminuida');
         }
     }
 
-    public function updateQuantity($itemId, $quantity)
+    public function updateQuantity(int $itemId, int $quantity): void
     {
-        $quantity = (int) $quantity;
+        $this->cartService->updateQuantity($itemId, $quantity);
+        $this->notifySuccess('Cantidad actualizada');
+    }
 
-        if ($quantity < 1) $quantity = 1;
-        if ($quantity > 5) $quantity = 5;
-
-        $cart = Session::get('cart', []);
-
-        if (isset($cart[$itemId])) {
-            $cart[$itemId]['quantity'] = $quantity;
-            Session::put('cart', $cart);
-            $this->updateCart();
-
-            $this->dispatch(
-                'show-notification',
-                type: 'success',
-                message: 'Cantidad actualizada'
-            );
+    public function removeItem(int $itemId): void
+    {
+        if ($itemTitle = $this->cartService->removeItem($itemId)) {
+            $this->notifySuccess("{$itemTitle} eliminado del carrito");
         }
     }
 
-    public function removeItem($itemId)
+    public function clearCart(): void
     {
-        $cart = Session::get('cart', []);
-
-        if (isset($cart[$itemId])) {
-            $itemTitle = $cart[$itemId]['title'];
-            unset($cart[$itemId]);
-            Session::put('cart', $cart);
-
-            $this->updateCart();
-
-            $this->dispatch(
-                'show-notification',
-                type: 'success',
-                message: "{$itemTitle} eliminado del carrito"
-            );
-        }
-    }
-
-    public function clearCart()
-    {
-        Session::forget('cart');
-        $this->updateCart();
-
-        $this->dispatch(
-            'show-notification',
-            type: 'success',
-            message: 'Carrito vaciado correctamente'
-        );
+        $this->cartService->clearCart();
+        $this->notifySuccess('Carrito vaciado correctamente');
     }
 
     #[On('cart-updated')]
-    public function refreshCart()
+    public function refreshCart(): void
     {
-        $this->updateCart();
+        $this->updateCartState();
+    }
+
+    private function updateCartState(): void
+    {
+        $this->cart = $this->cartService->getCart();
+        $this->total = $this->cartService->getTotal();
+    }
+
+    private function notifySuccess(string $message): void
+    {
+        $this->updateCartState();
+        $this->dispatch('show-notification', type: 'success', message: $message);
     }
 
     public function render()

@@ -2,231 +2,121 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\Payment;
+use App\Http\Requests\CheckoutRequest;
+use App\Services\CartService;
+use App\Services\OrderService;
 use App\Mail\PedidoConfirmado;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
-    private const CART_EMPTY_MESSAGE = 'Tu carrito está vacío';
-    
+    public function __construct(
+        private CartService $cartService,
+        private OrderService $orderService
+    ) {}
+
     public function index()
     {
-        return view('cart.index');
+        return view('cart.index', [
+            'cart' => $this->cartService->getCart(),
+            'total' => $this->cartService->getTotal()
+        ]);
     }
 
-    public function add(Request $request, Book $book)
+    /**
+     * Agregar libro al carrito
+     */
+    public function add(Request $request, $book)
     {
         $request->validate([
             'quantity' => 'required|integer|min:1|max:5'
         ]);
 
-        $cart = Session::get('cart', []);
+        $bookModel = \App\Models\Book::findOrFail($book);
 
-        if (isset($cart[$book->id])) {
-            $cart[$book->id]['quantity'] += $request->quantity;
-        } else {
-            $cart[$book->id] = [
-                'id' => $book->id,
-                'title' => $book->title,
-                'author' => $book->author,
-                'price' => $book->price,
-                'image' => $book->image,
-                'quantity' => $request->quantity
-            ];
-        }
-
-        Session::put('cart', $cart);
+        $this->cartService->addItem([
+            'id' => $bookModel->id,
+            'title' => $bookModel->title,
+            'author' => $bookModel->author,
+            'price' => $bookModel->price,
+            'image' => $bookModel->image,
+        ], $request->quantity);
 
         return redirect()->back()->with('success', 'Libro añadido al carrito');
     }
 
-    
-    public function checkout()
+    /**
+     * Actualizar cantidad (para Livewire)
+     */
+    public function update(Request $request, $id)
     {
-        $cart = Session::get('cart', []);
-
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
-        }
-
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-
-        return view('cart.checkout', compact('cart', 'total'));
+        // Este método probablemente lo maneje Livewire
+        return redirect()->back();
     }
 
-    public function processCheckout(Request $request)
+    /**
+     * Eliminar item del carrito
+     */
+    public function remove($id)
     {
-        $request->validate([
-            'payment_method' => 'required|in:yape,plin,bank_transfer,email',
-            'voucher' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-
-        $cart = Session::get('cart', []);
-
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
+        if ($itemTitle = $this->cartService->removeItem($id)) {
+            return redirect()->back()->with('success', "{$itemTitle} eliminado del carrito");
         }
 
-        $order = Order::create([
-            'user_id' => Auth::id(),
-            'order_date' => now(),
-            'status' => 'pending'
-        ]);
+        return redirect()->back()->with('error', 'Item no encontrado en el carrito');
+    }
 
-        $total = 0;
-
-        foreach ($cart as $item) {
-            $subtotal = $item['price'] * $item['quantity'];
-            $total += $subtotal;
-
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'book_id' => $item['id'],
-                'quantity' => $item['quantity'],
-                'subtotal' => $subtotal
-            ]);
+    public function checkout()
+    {
+        if ($this->cartService->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
         }
 
+        return view('cart.checkout', [
+            'cart' => $this->cartService->getCart(),
+            'total' => $this->cartService->getTotal()
+        ]);
+    }
+
+    public function processCheckout(CheckoutRequest $request)
+    {
+        if ($this->cartService->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+        }
+
+        $cart = $this->cartService->getCart();
         $voucherPath = $request->file('voucher')->store('vouchers', 'public');
 
-        Payment::create([
-            'order_id' => $order->id,
-            'payment_method' => $request->payment_method,
-            'amount' => $total,
-            'payment_date' => now(),
-            'voucher_image' => $voucherPath,
-            'status' => 'pending'
-        ]);
+        $order = $this->orderService->createOrder(
+            $cart,
+            $request->payment_method,
+            $voucherPath
+        );
 
-        Session::forget('cart');
+        $this->cartService->clearCart();
 
         return redirect()->route('orders.show', $order->id)
             ->with('success', '¡Pedido realizado con éxito! Espera la confirmación de tu pago.');
     }
 
-    public function yape()
+    public function enviarCorreo(CheckoutRequest $request)
     {
-        $cart = Session::get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
-        }
-
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-        return view('cart.yape', compact('cart', 'total'));
-    }
-
-    public function plin()
-    {
-        $cart = Session::get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
-        }
-
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-        return view('cart.plin', compact('cart', 'total'));
-    }
-
-    public function bank()
-    {
-        $cart = Session::get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
-        }
-
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-        return view('cart.bank', compact('cart', 'total'));
-    }
-
-    public function correo()
-    {
-        $cart = Session::get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
-        }
-
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-        return view('cart.correo', compact('cart', 'total'));
-    }
-
-
-    public function enviarCorreo(Request $request)
-    {
-        $request->validate([
-            'voucher' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-
-
-        $cart = Session::get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', self::CART_EMPTY_MESSAGE);
-        }
-
-        $user = Auth::user();
-        $total = 0;
-
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
+        if ($this->cartService->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
         }
 
         try {
-
-            // Crear orden
-            $order = Order::create([
-                'user_id' => $user->id,
-                'order_date' => now(),
-                'status' => 'pending'
-            ]);
-
-            // Guardar detalles
-            foreach ($cart as $item) {
-                OrderDetail::create([
-                    'order_id' => $order->id,
-                    'book_id' => $item['id'],
-                    'quantity' => $item['quantity'],
-                    'subtotal' => $item['price'] * $item['quantity'],
-                ]);
-            }
-
-            // Guardar comprobante
+            $cart = $this->cartService->getCart();
             $voucherPath = $request->file('voucher')->store('vouchers', 'public');
 
-            Payment::create([
-                'order_id' => $order->id,
-                'payment_method' => 'email',
-                'amount' => $total,
-                'payment_date' => now(),
-                'voucher_image' => $voucherPath,
-                'status' => 'pending'
-            ]);
+            $order = $this->orderService->createOrder($cart, 'email', $voucherPath);
 
             // Enviar email
-            Mail::to($user->email)  // Enviar al cliente que compró
-                ->send(new PedidoConfirmado($cart, $user, $voucherPath));
+            Mail::to(auth()->user()->email)
+                ->send(new PedidoConfirmado($cart, auth()->user(), $voucherPath));
 
-            // Limpiar carrito
-            Session::forget('cart');
+            $this->cartService->clearCart();
 
             return redirect()->route('bookmart')
                 ->with('success', '¡Pedido realizado con éxito! Se envió el comprobante por correo.');
@@ -234,5 +124,38 @@ class CartController extends Controller
             return redirect()->back()
                 ->with('error', 'Error al procesar el pedido. Por favor, intenta nuevamente.');
         }
+    }
+
+    // Métodos de visualización
+    public function yape()
+    {
+        return $this->showPaymentView('yape');
+    }
+
+    public function plin()
+    {
+        return $this->showPaymentView('plin');
+    }
+
+    public function bank()
+    {
+        return $this->showPaymentView('bank');
+    }
+
+    public function correo()
+    {
+        return $this->showPaymentView('correo');
+    }
+
+    private function showPaymentView(string $method)
+    {
+        if ($this->cartService->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
+        }
+
+        return view("cart.{$method}", [
+            'cart' => $this->cartService->getCart(),
+            'total' => $this->cartService->getTotal()
+        ]);
     }
 }
