@@ -6,14 +6,14 @@
     <!-- Hero Section Mejorada -->
     <section class="relative w-full h-[70vh] min-h-[500px] bg-gray-900 overflow-hidden">
         <!-- Imagen de fondo con overlay -->
-        <div class="absolute inset-1">
-            <img src="{{ asset('img/fondo_books.jpg') }}" alt="Biblioteca digital Grupo A&T"
+        <div class="absolute inset-0">
+            <img src="{{ asset('img/banners/Banner_limpio.png') }}" alt="Biblioteca digital Grupo A&T"
                 class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-[#04050E]/80 to-[#272b30]/60"></div>
         </div>
 
         <!-- Contenido Hero -->
-        <div class="relative container mx-auto h-full flex items-center px-3">
+        <div class="relative container mx-auto h-full flex items-center px-10">
             <div class="max-w-2xl text-white">
                 <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">
                     Descubre el <span class="text-[#ea9216]">conocimiento</span> que transforma
@@ -33,253 +33,332 @@
                 </div>
             </div>
         </div>
-
-        <!-- Indicador de scroll -->
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-            <div class="animate-bounce">
-                <i class="fas fa-chevron-down text-white text-2xl"></i>
-            </div>
-        </div>
     </section>
 
-    <!-- Publicidad Section - Modificada para banners 1080x1080 -->
-    <section class="py-12 bg-gradient-to-br from-gray-50 to-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-8">
-                <span class="text-[#ea9216] font-semibold uppercase tracking-wider text-sm">Novedad</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Libro Destacado</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto mt-4">
-                    Conoce nuestro manual más vendido para docentes innovadores
+    <!-- Publicidad Section - Banners Horizontales -->
+    <section class="py-16 bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]">
+        <div class="container mx-auto px-4 max-w-7xl">
+            <!-- Encabezado mejorado -->
+            <div class="text-center mb-12">
+                <div
+                    class="inline-flex items-center gap-2 bg-[#ea9216]/10 text-[#ea9216] px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4">
+                    <span class="w-2 h-2 bg-[#ea9216] rounded-full animate-pulse"></span>
+                    Novedad Exclusiva
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-[#052f5a] mt-2 mb-4 leading-tight">
+                    Libro <span class="text-[#ea9216]">Destacado</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-[#ea9216] to-[#052f5a] mx-auto mb-6 rounded-full"></div>
+                <p class="text-lg text-[#272b30] max-w-3xl mx-auto leading-relaxed">
+                    Descubre nuestro manual más vendido para docentes innovadores. Una herramienta esencial para transformar
+                    tu práctica educativa.
                 </p>
             </div>
 
-            <div class="swiper bannerSwiper">
-                <div class="swiper-wrapper">
-                    <!-- Banner 1 - Manual del Docente Innovador -->
-                    <div class="swiper-slide">
-                        <div
-                            class="bg-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300 group">
-                            <div class="relative">
-                                <img src="{{ asset('img/banners/ad_publi.jpg') }}"
-                                    alt="Manual del Docente Innovador - IA Generativa"
-                                    class="w-full h-96 object-cover group-hover:scale-105 transition-transform duration-500">
-                                <div class="absolute top-4 left-4">
-                                    <span
-                                        class="bg-[#ea9216] text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                                        🔥 Más Vendido
-                                    </span>
+            <!-- Contenedor del carrusel mejorado - Layout Horizontal -->
+            <div class="relative">
+                <div class="swiper bannerSwiper">
+                    <div class="swiper-wrapper">
+                        <!-- Banner 1 - Manual del Docente Innovador (HORIZONTAL) -->
+                        <div class="swiper-slide">
+                            <div
+                                class="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 group h-full flex flex-col md:flex-row">
+                                <!-- Imagen -->
+                                <div class="relative md:w-2/5 h-64 md:h-auto overflow-hidden">
+                                    <img src="{{ asset('img/banners/ad_publi.jpg') }}"
+                                        alt="Manual del Docente Innovador - IA Generativa"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                    <div class="absolute top-4 left-4">
+                                        <span
+                                            class="bg-gradient-to-r from-[#ea9216] to-[#d48314] text-white px-3 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+                                            <i class="fas fa-fire"></i> Más Vendido
+                                        </span>
+                                    </div>
+                                    <div class="absolute bottom-4 right-4">
+                                        <span
+                                            class="bg-gradient-to-r from-[#052f5a] to-[#041e3a] text-white px-3 py-2 rounded-lg text-base font-bold shadow-lg flex items-center gap-1">
+                                            <span class="text-xs line-through text-gray-300 mr-1">S/ 25.00</span> S/ 10.00
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class="absolute bottom-4 right-4">
-                                    <span class="bg-[#052f5a] text-white px-4 py-2 rounded-lg text-lg font-bold shadow-lg">
-                                        S/ 10.00
-                                    </span>
+
+                                <!-- Contenido -->
+                                <div class="md:w-3/5 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-[#04050E] mb-3">Manual del DOCENTE INNOVADOR</h3>
+                                        <p class="text-[#272b30] mb-4 leading-relaxed">
+                                            Aplicando IA Generativa - Incluye banco de 1,440 Prompts Maestros para todos los
+                                            niveles educativos. Ideal para docentes que buscan innovar en sus metodologías
+                                            de enseñanza.
+                                        </p>
+                                        <div class="grid grid-cols-2 gap-4 mb-4">
+                                            <div class="flex items-center text-sm text-[#272b30]">
+                                                <div
+                                                    class="w-8 h-8 bg-[#ea9216]/10 rounded-full flex items-center justify-center mr-2">
+                                                    <i class="fas fa-users text-[#ea9216] text-xs"></i>
+                                                </div>
+                                                <span>+100 vendidos esta semana</span>
+                                            </div>
+                                            <div class="flex items-center text-sm text-[#272b30]">
+                                                <div
+                                                    class="w-8 h-8 bg-[#052f5a]/10 rounded-full flex items-center justify-center mr-2">
+                                                    <i class="fas fa-clock text-[#052f5a] text-xs"></i>
+                                                </div>
+                                                <span>Oferta por tiempo limitado</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="https://wa.me/51942784270?text=Hola,%20estoy%20interesado%20en%20el%20Manual%20del%20Docente%20Innovador"
+                                        target="_blank"
+                                        class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-center">
+                                        <i class="fab fa-whatsapp text-lg"></i>
+                                        Comprar por WhatsApp
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="p-8">
-                                <h3 class="text-2xl font-bold text-gray-900 mb-3">Manual del DOCENTE INNOVADOR</h3>
-                                <p class="text-gray-600 mb-4 leading-relaxed">
-                                    Aplicando IA Generativa - Incluye banco de 1,440 Prompts Maestros para todos los niveles
-                                    educativos.
-                                </p>
-                                <div class="flex items-center justify-between mb-4">
-                                    <span class="text-sm text-gray-500">
-                                        <i class="fas fa-users text-[#ea9216] mr-1"></i>
-                                        +100 vendidos esta semana
-                                    </span>
-                                    <span class="text-sm text-gray-500">
-                                        <i class="fas fa-clock text-[#052f5a] mr-1"></i>
-                                        Oferta limitada
-                                    </span>
-                                </div>
-                                <a href="https://wa.me/51942784270?text=Hola,%20estoy%20interesado%20en%20el%20Manual%20del%20Docente%20Innovador"
-                                    target="_blank"
-                                    class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 text-center shadow-lg hover:shadow-xl">
-                                    <i class="fab fa-whatsapp text-xl"></i>
-                                    Comprar por WhatsApp
-                                </a>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Banner 2 - Contenidos del Libro -->
-                    <div class="swiper-slide">
-                        <div
-                            class="bg-gradient-to-br from-[#052f5a] to-[#04050E] rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300 group">
-                            <div class="relative h-96 overflow-hidden">
-                                <img src="{{ asset('img/banners/ad_plu2.jpg') }}"
-                                    alt="Contenidos del Manual del Docente Innovador"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                <div class="absolute inset-0 bg-black/20"></div>
-                                <div class="absolute top-4 left-4">
-                                    <span class="bg-[#ea9216] text-white px-4 py-2 rounded-full text-sm font-bold">
-                                        📚 1,440 Prompts
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="p-8 text-white">
-                                <h3 class="text-2xl font-bold mb-4">Contenido Exclusivo</h3>
-                                <div class="grid grid-cols-2 gap-3 mb-6">
-                                    <div class="flex items-center gap-2 text-sm">
-                                        <i class="fas fa-check text-[#ea9216]"></i>
-                                        <span>Educación Inicial</span>
-                                    </div>
-                                    <div class="flex items-center gap-2 text-sm">
-                                        <i class="fas fa-check text-[#ea9216]"></i>
-                                        <span>Educación Primaria</span>
-                                    </div>
-                                    <div class="flex items-center gap-2 text-sm">
-                                        <i class="fas fa-check text-[#ea9216]"></i>
-                                        <span>Educación Secundaria</span>
-                                    </div>
-                                    <div class="flex items-center gap-2 text-sm">
-                                        <i class="fas fa-check text-[#ea9216]"></i>
-                                        <span>Básica Alternativa</span>
+                        <!-- Banner 2 - Contenidos del Libro -->
+                        <div class="swiper-slide">
+                            <div
+                                class="bg-gradient-to-r from-[#052f5a] to-[#04050E] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 group h-full flex flex-col md:flex-row">
+                                <!-- Imagen -->
+                                <div class="relative md:w-2/5 h-64 md:h-auto overflow-hidden">
+                                    <img src="{{ asset('img/banners/ad_plu2.jpg') }}"
+                                        alt="Contenidos del Manual del Docente Innovador"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-[#04050E]/50 to-transparent"></div>
+                                    <div class="absolute top-4 left-4">
+                                        <span
+                                            class="bg-gradient-to-r from-[#ea9216] to-[#d48314] text-white px-3 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+                                            <i class="fas fa-book"></i> 1,440 Prompts
+                                        </span>
                                     </div>
                                 </div>
-                                <p class="text-gray-200 mb-6">
-                                    Banco completo de prompts para ChatGPT organizado por áreas curriculares y niveles
-                                    educativos.
-                                </p>
-                                <a href="https://wa.me/51942784270?text=Hola,%20quiero%20más%20información%20sobre%20los%20contenidos%20del%20manual"
-                                    target="_blank"
-                                    class="w-full bg-[#ea9216] hover:bg-[#d48314] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-center">
-                                    <i class="fas fa-info-circle"></i>
-                                    Más Información
-                                </a>
+
+                                <!-- Contenido -->
+                                <div class="md:w-3/5 p-6 text-white flex flex-col justify-between">
+                                    <div>
+                                        <h3 class="text-2xl font-bold mb-4">Contenido <span
+                                                class="text-[#ea9216]">Exclusivo</span></h3>
+                                        <div class="grid grid-cols-2 gap-3 mb-4">
+                                            <div class="flex items-center gap-2 text-sm bg-white/5 rounded-lg p-2">
+                                                <div
+                                                    class="w-6 h-6 bg-[#ea9216] rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <i class="fas fa-check text-white text-xs"></i>
+                                                </div>
+                                                <span>Educación Inicial</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm bg-white/5 rounded-lg p-2">
+                                                <div
+                                                    class="w-6 h-6 bg-[#ea9216] rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <i class="fas fa-check text-white text-xs"></i>
+                                                </div>
+                                                <span>Educación Primaria</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm bg-white/5 rounded-lg p-2">
+                                                <div
+                                                    class="w-6 h-6 bg-[#ea9216] rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <i class="fas fa-check text-white text-xs"></i>
+                                                </div>
+                                                <span>Educación Secundaria</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm bg-white/5 rounded-lg p-2">
+                                                <div
+                                                    class="w-6 h-6 bg-[#ea9216] rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <i class="fas fa-check text-white text-xs"></i>
+                                                </div>
+                                                <span>Básica Alternativa</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-gray-200 mb-4">
+                                            Banco completo de prompts para ChatGPT organizado por áreas curriculares y
+                                            niveles educativos. Incluye estrategias prácticas y ejemplos aplicables
+                                            inmediatamente en el aula.
+                                        </p>
+                                    </div>
+                                    <a href="https://wa.me/51942784270?text=Hola,%20quiero%20más%20información%20sobre%20los%20contenidos%20del%20manual"
+                                        target="_blank"
+                                        class="w-full bg-gradient-to-r from-[#ea9216] to-[#d48314] hover:from-[#d48314] hover:to-[#bf7512] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-center">
+                                        <i class="fas fa-info-circle"></i>
+                                        Más Información
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Banner 3 - Especificaciones Técnicas -->
-                    <div class="swiper-slide">
-                        <div
-                            class="bg-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300 group border-2 border-[#ea9216]/20">
-                            <div class="relative h-96 overflow-hidden">
-                                <img src="{{ asset('img/banners/ad_publi3.jpg') }}"
-                                    alt="Especificaciones del Manual del Docente Innovador"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                <div class="absolute top-4 right-4">
-                                    <span class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-bold">
-                                        ⏳ Oferta Limitada
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="p-8">
-                                <h3 class="text-2xl font-bold text-gray-900 mb-4">Información del Producto</h3>
-                                <div class="space-y-3 mb-6">
-                                    <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                                        <span class="text-gray-600">Formato:</span>
-                                        <span class="font-semibold text-[#052f5a]">PDF Digital</span>
-                                    </div>
-                                    <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                                        <span class="text-gray-600">ISBN:</span>
-                                        <span class="font-semibold text-[#052f5a]">978-612-03-1387-9</span>
-                                    </div>
-                                    <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                                        <span class="text-gray-600">Depósito Legal:</span>
-                                        <span class="font-semibold text-[#052f5a]">2025-09348</span>
-                                    </div>
-                                    <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                                        <span class="text-gray-600">Entrega:</span>
-                                        <span class="font-semibold text-[#052f5a]">Inmediata vía WhatsApp/Email</span>
+                        <!-- Banner 3 - Especificaciones Técnicas (HORIZONTAL) -->
+                        <div class="swiper-slide">
+                            <div
+                                class="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 group h-full flex flex-col md:flex-row border-2 border-[#ea9216]/10">
+                                <!-- Imagen -->
+                                <div class="relative md:w-2/5 h-64 md:h-auto overflow-hidden">
+                                    <img src="{{ asset('img/banners/ad_publi3.jpg') }}"
+                                        alt="Especificaciones del Manual del Docente Innovador"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                    <div class="absolute top-4 right-4">
+                                        <span
+                                            class="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
+                                            <i class="fas fa-clock"></i> Oferta Limitada
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-                                    <p class="text-yellow-800 text-sm text-center">
-                                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                                        Precio de lanzamiento por tiempo limitado
-                                    </p>
+
+                                <!-- Contenido -->
+                                <div class="md:w-3/5 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-[#04050E] mb-4">Información del <span
+                                                class="text-[#052f5a]">Producto</span></h3>
+                                        <div class="space-y-3 mb-4">
+                                            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+                                                <span class="text-[#272b30] flex items-center gap-2">
+                                                    <i class="fas fa-file-pdf text-[#ea9216]"></i> Formato:
+                                                </span>
+                                                <span class="font-semibold text-[#052f5a]">PDF Digital</span>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+                                                <span class="text-[#272b30] flex items-center gap-2">
+                                                    <i class="fas fa-barcode text-[#ea9216]"></i> ISBN:
+                                                </span>
+                                                <span class="font-semibold text-[#052f5a]">978-612-03-1387-9</span>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+                                                <span class="text-[#272b30] flex items-center gap-2">
+                                                    <i class="fas fa-certificate text-[#ea9216]"></i> Depósito Legal:
+                                                </span>
+                                                <span class="font-semibold text-[#052f5a]">2025-09348</span>
+                                            </div>
+                                            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+                                                <span class="text-[#272b30] flex items-center gap-2">
+                                                    <i class="fas fa-shipping-fast text-[#ea9216]"></i> Entrega:
+                                                </span>
+                                                <span class="font-semibold text-[#052f5a]">Vía WhatsApp/Email</span>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                                            <p
+                                                class="text-yellow-800 text-sm text-center flex items-center justify-center gap-2">
+                                                <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                                                Precio de lanzamiento por tiempo limitado - ¡No te quedes sin el tuyo!
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <a href="https://wa.me/51942784270?text=Hola,%20quiero%20comprar%20el%20Manual%20del%20Docente%20Innovador"
+                                        target="_blank"
+                                        class="w-full bg-gradient-to-r from-[#052f5a] to-[#041e3a] hover:from-[#041e3a] hover:to-[#03152d] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-center">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Comprar Ahora
+                                    </a>
                                 </div>
-                                <a href="https://wa.me/51942784270?text=Hola,%20quiero%20comprar%20el%20Manual%20del%20Docente%20Innovador"
-                                    target="_blank"
-                                    class="w-full bg-[#052f5a] hover:bg-[#041e3a] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-center">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    Comprar Ahora
-                                </a>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Banner 4 - Autores y Contacto -->
-                    <div class="swiper-slide">
-                        <div
-                            class="bg-gradient-to-br from-[#272b30] to-[#04050E] rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300 group">
-                            <div class="relative h-96 overflow-hidden">
-                                <img src="{{ asset('img/ing-Taya.jpg') }}" alt="Autores y contacto Grupo A&T"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                <div class="absolute bottom-4 left-4 text-white">
-                                    <h4 class="text-xl font-bold">Ing. Alex Taya</h4>
-                                    <p class="text-gray-200">Prof. Tania Urcia</p>
+                        <!-- Banner 4 - Autores y Contacto (HORIZONTAL) -->
+                        <div class="swiper-slide">
+                            <div
+                                class="bg-gradient-to-r from-[#272b30] to-[#04050E] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 group h-full flex flex-col md:flex-row">
+                                <!-- Imagen -->
+                                <div class="relative md:w-2/5 h-64 md:h-auto overflow-hidden">
+                                    <img src="{{ asset('img/ing-Taya.jpg') }}" alt="Autores y contacto Grupo A&T"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <h4 class="text-lg font-bold">Ing. Alex Taya</h4>
+                                        <p class="text-gray-200 text-sm">Prof. Tania Urcia</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="p-8 text-white">
-                                <h3 class="text-2xl font-bold mb-4">Contacto Directo</h3>
-                                <p class="text-gray-200 mb-6">
-                                    Venta directa con los autores. Atención personalizada y soporte post-venta.
-                                </p>
 
-                                <div class="space-y-3 mb-6">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-[#ea9216] rounded-full flex items-center justify-center">
+                                <!-- Contenido -->
+                                <div class="md:w-3/5 p-6 text-white flex flex-col justify-between">
+                                    <div>
+                                        <h3 class="text-2xl font-bold mb-4">Contacto <span
+                                                class="text-[#ea9216]">Directo</span></h3>
+                                        <p class="text-gray-200 mb-4">
+                                            Venta directa con los autores. Atención personalizada y soporte post-venta.
+                                            Resolvemos todas tus dudas sobre la implementación de IA en educación.
+                                        </p>
+                                        <div class="space-y-3 mb-4">
+                                            <div class="flex items-center gap-3 bg-white/5 rounded-lg p-3">
+                                                <div
+                                                    class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <i class="fab fa-whatsapp text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-300">WhatsApp</p>
+                                                    <p class="font-semibold">+51 942 784 270</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-3 bg-white/5 rounded-lg p-3">
+                                                <div
+                                                    class="w-10 h-10 bg-[#052f5a] rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <i class="fas fa-envelope text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-300">Email</p>
+                                                    <p class="font-semibold">envío directo</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-3 bg-white/5 rounded-lg p-3">
+                                                <div
+                                                    class="w-10 h-10 bg-[#1877F2] rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <i class="fab fa-facebook-f text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-300">Facebook</p>
+                                                    <p class="font-semibold">facebook.com/grupoaytperu</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <a href="https://wa.me/51942784270" target="_blank"
+                                            class="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center gap-2 text-center text-sm">
                                             <i class="fab fa-whatsapp"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-300">WhatsApp</p>
-                                            <p class="font-semibold">+51 942 784 270</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-[#052f5a] rounded-full flex items-center justify-center">
-                                            <i class="fas fa-envelope"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-300">Email</p>
-                                            <p class="font-semibold">envío directo</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-[#1877F2] rounded-full flex items-center justify-center">
+                                            WhatsApp
+                                        </a>
+                                        <a href="https://facebook.com/grupoaytperu" target="_blank"
+                                            class="flex-1 bg-gradient-to-r from-[#1877F2] to-[#1666D6] hover:from-[#1666D6] hover:to-[#145cbf] text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center gap-2 text-center text-sm">
                                             <i class="fab fa-facebook-f"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-300">Facebook</p>
-                                            <p class="font-semibold">facebook.com/grupoaytperu</p>
-                                        </div>
+                                            Facebook
+                                        </a>
                                     </div>
-                                </div>
-
-                                <div class="flex gap-3">
-                                    <a href="https://wa.me/51942784270" target="_blank"
-                                        class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center gap-2 text-center text-sm">
-                                        <i class="fab fa-whatsapp"></i>
-                                        WhatsApp
-                                    </a>
-                                    <a href="https://facebook.com/grupoaytperu" target="_blank"
-                                        class="flex-1 bg-[#1877F2] hover:bg-[#1666D6] text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center gap-2 text-center text-sm">
-                                        <i class="fab fa-facebook-f"></i>
-                                        Facebook
-                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Pagination -->
+                    <div class="swiper-pagination mt-6 !relative"></div>
                 </div>
 
-                <!-- Pagination -->
-                <div class="swiper-pagination mt-8"></div>
-
-                <!-- Navigation -->
-                {{-- <div class="swiper-button-next text-[#052f5a]"></div>
-                <div class="swiper-button-prev text-[#052f5a]"></div> --}}
+                <!-- Navegación -->
+                <div class="swiper-button-next-custom absolute top-1/2 -translate-y-1/2 -right-4 z-10 hidden md:flex">
+                    <div
+                        class="w-10 h-10 bg-white/90 hover:bg-white shadow-lg rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 group">
+                        <i class="fas fa-chevron-right text-[#052f5a] group-hover:text-[#ea9216]"></i>
+                    </div>
+                </div>
+                <div class="swiper-button-prev-custom absolute top-1/2 -translate-y-1/2 -left-4 z-10 hidden md:flex">
+                    <div
+                        class="w-10 h-10 bg-white/90 hover:bg-white shadow-lg rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 group">
+                        <i class="fas fa-chevron-left text-[#052f5a] group-hover:text-[#ea9216]"></i>
+                    </div>
+                </div>
             </div>
 
             <!-- Indicador de oferta especial -->
             <div class="text-center mt-8">
-                <div class="inline-flex items-center gap-2 bg-red-50 border border-red-200 rounded-full px-6 py-3">
-                    <i class="fas fa-fire text-red-500"></i>
-                    <span class="text-red-700 font-semibold">¡Oferta de lanzamiento! Precio especial S/ 10.00 por tiempo
-                        limitado</span>
+                <div
+                    class="inline-flex items-center gap-3 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-full px-6 py-3">
+                    <div
+                        class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-bolt text-white text-sm"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-red-700 font-bold">¡Oferta de lanzamiento!</p>
+                        <p class="text-red-600 text-sm">Precio especial S/ 10.00 por tiempo limitado</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -472,7 +551,7 @@
         </div>
     </section>
 
-    <!-- Newsletter Section Mejorada -->
+    <!-- Newsletter Section -->
     <section class="py-16 bg-white">
         <div class="container mx-auto px-4 max-w-5xl">
             <div
@@ -516,13 +595,11 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
     <script>
-        // Inicializar Swiper para el hero
         document.addEventListener('DOMContentLoaded', function() {
-            // Hero Swiper
-            var heroSwiper = new Swiper('.heroSwiper', {
+            var bannerSwiper = new Swiper('.bannerSwiper', {
                 loop: true,
                 autoplay: {
-                    delay: 5000,
+                    delay: 6000,
                     disableOnInteraction: false,
                 },
                 pagination: {
@@ -530,25 +607,8 @@
                     clickable: true,
                 },
                 navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                effect: 'fade',
-                fadeEffect: {
-                    crossFade: true
-                },
-            });
-
-            // Banner Swiper
-            var bannerSwiper = new Swiper('.bannerSwiper', {
-                loop: true,
-                autoplay: {
-                    delay: 4000,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
+                    nextEl: '.swiper-button-next-custom',
+                    prevEl: '.swiper-button-prev-custom',
                 },
                 breakpoints: {
                     320: {
@@ -560,139 +620,77 @@
                         spaceBetween: 30
                     },
                     1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 30
+                        slidesPerView: 1,
+                        spaceBetween: 40
                     }
                 }
             });
 
-            // Animación de contadores mejorada
-            const counters = [{
-                    id: 'booksCount',
-                    target: 150,
-                    suffix: '+'
-                },
-                {
-                    id: 'categoriesCount',
-                    target: 12,
-                    suffix: '+'
-                },
-                {
-                    id: 'clientsCount',
-                    target: 2500,
-                    suffix: '+'
-                },
-                {
-                    id: 'experienceCount',
-                    target: 5,
-                    suffix: '+'
-                }
-            ];
-
-            function animateCounter(counter, duration = 2000) {
-                const element = document.getElementById(counter.id);
-                const start = 0;
-                const increment = counter.target / (duration / 16);
-                let current = start;
-
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= counter.target) {
-                        clearInterval(timer);
-                        current = counter.target;
-                    }
-                    element.textContent = Math.floor(current) + (counter.suffix || '');
-                }, 16);
-            }
-
-            // Activar animación cuando la sección sea visible
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        counters.forEach(counter => animateCounter(counter));
-                        observer.unobserve(entry.target);
-                    }
+            // Efecto hover para las tarjetas horizontales
+            const cards = document.querySelectorAll('.swiper-slide > div');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
                 });
-            }, {
-                threshold: 0.3
-            });
 
-            const statsSection = document.querySelector('.bg-white');
-            if (statsSection) {
-                observer.observe(statsSection);
-            }
-
-            // Smooth scroll para el indicador del hero
-            document.querySelector('.absolute.bottom-8').addEventListener('click', function() {
-                document.querySelector('.bg-gray-50').scrollIntoView({
-                    behavior: 'smooth'
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
                 });
-            });
-
-            // Efecto parallax para el hero
-            window.addEventListener('scroll', function() {
-                const scrolled = window.pageYOffset;
-                const hero = document.querySelector('.heroSwiper');
-                if (hero) {
-                    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-                }
             });
         });
     </script>
 
     <style>
-        /* Estilos adicionales mejorados */
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        /* Estilos para banners horizontales */
+        .swiper-slide {
+            height: auto;
         }
 
-        /* Mejoras de animación */
-        .transform {
-            transition: transform 0.3s ease;
+        .swiper-slide>div {
+            height: 100%;
+            min-height: 320px;
         }
 
-        /* Efectos hover mejorados */
-        .hover\:scale-105:hover {
-            transform: scale(1.05);
-        }
-
-        /* Swiper personalización */
+        /* Paginación personalizada */
         .swiper-pagination-bullet {
-            background: #fff;
+            width: 5px;
+            height: 5px;
+            background: #cbd5e0;
             opacity: 0.5;
         }
 
         .swiper-pagination-bullet-active {
             background: #ea9216;
             opacity: 1;
+            width: 30px;
+            border-radius: 5px;
         }
 
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: #ea9216;
-            background: rgba(255, 255, 255, 0.2);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            backdrop-filter: blur(10px);
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+
+            .swiper-button-next-custom,
+            .swiper-button-prev-custom {
+                display: none !important;
+            }
+
+            .swiper-slide>div {
+                flex-direction: column;
+            }
+
+            .swiper-slide>div>div:first-child {
+                width: 100% !important;
+                height: 200px;
+            }
+
+            .swiper-slide>div>div:last-child {
+                width: 100% !important;
+            }
         }
 
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-            font-size: 20px;
-        }
-
-        /* Gradientes personalizados */
-        .bg-gradient-custom {
-            background: linear-gradient(135deg, #052f5a 0%, #04050E 100%);
-        }
-
-        /* Sombras mejoradas */
-        .shadow-3xl {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        /* Mejoras de transición */
+        .swiper-slide>div {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
     </style>
 @endsection

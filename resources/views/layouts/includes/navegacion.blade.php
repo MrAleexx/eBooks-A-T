@@ -129,7 +129,7 @@
 
                             <a href="{{ route('perfil') }}"
                                 class="flex items-center px-4 py-2 text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors duration-200">
-                                <i class="fas fa-user-edit mr-3 text-orange-400 w-4 text-center"></i>
+                                <i class="fas fa-user mr-3 text-orange-400 w-4 text-center"></i>
                                 Mi Perfil
                             </a>
 
@@ -181,7 +181,7 @@
             </div>
         </div>
 
-        <!-- Mobile Menu CORREGIDO -->
+        <!-- Mobile Menu -->
         <div class="lg:hidden transition-all duration-300 overflow-hidden" x-show="mobileMenuOpen"
             x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 transform -translate-y-4"
@@ -219,7 +219,7 @@
                     @endauth
                 </div>
 
-                <!-- User Actions Mobile - SIN DUPLICADOS -->
+                <!-- User Actions Mobile -->
                 @auth
                     <div class="border-t border-gray-200 mt-3 pt-4 px-2">
                         <!-- User Info Mobile -->

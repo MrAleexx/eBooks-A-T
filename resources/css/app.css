@@ -1,9 +1,11 @@
 @import 'tailwindcss';
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* Importar componentes CSS */
+@import './components/book-card.css';
+@import './components/empty-state.css';
+@import './components/success-message.css';
+
+@import './components/pdf-viewer.css';
 
 body {
     font-family: "Poppins", sans-serif;

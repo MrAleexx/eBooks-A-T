@@ -54,7 +54,7 @@
                                 @csrf
                                 <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                                     <div class="flex items-center gap-3">
-                                        <label class="text-[#04050E] font-semibold text-sm">Cantidad:</label>
+                                        <label class="text-[#04050E] font-semibold text-sm">Cantidad:
                                         <div
                                             class="flex items-center border border-[#272b30]/20 rounded-lg overflow-hidden">
                                             <button type="button" onclick="decrementQuantity()"

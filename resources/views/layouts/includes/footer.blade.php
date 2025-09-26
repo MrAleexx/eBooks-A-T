@@ -1,6 +1,6 @@
-<footer class="bg-[#04050E] text-white relative overflow-hidden">
+<footer class="bg-[#061b31] text-white relative overflow-hidden">
     <!-- Elemento decorativo superior -->
-    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#ea9216] via-[#052f5a] to-[#ea9216]"></div>
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#ea9216] via-[#ea9216] to-[#ea9216]"></div>
 
     <!-- Efectos de fondo sutiles -->
     <div class="absolute inset-0 opacity-5">
@@ -9,24 +9,6 @@
     </div>
 
     <div class="relative z-10 mx-auto w-full max-w-screen-xl px-4 py-12 lg:py-16">
-        {{-- <!-- Sección Newsletter -->
-        <div class="bg-gradient-to-r from-[#052f5a] to-[#272b30] rounded-2xl p-6 mb-10 shadow-xl">
-            <div class="max-w-2xl mx-auto text-center">
-                <h3 class="text-xl font-bold mb-2">Mantente informado</h3>
-                <p class="text-gray-300 mb-4 text-sm">Suscríbete para recibir novedades sobre nuestros libros digitales
-                </p>
-
-                <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                    <input type="email" placeholder="Tu correo electrónico"
-                        class="flex-grow px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ea9216] text-sm">
-                    <button type="submit"
-                        class="px-4 py-2 bg-[#ea9216] text-white font-medium rounded-lg hover:bg-[#d48314] transition-colors duration-300 flex items-center justify-center gap-2 text-sm">
-                        Suscribirse <i class="fas fa-paper-plane text-xs"></i>
-                    </button>
-                </form>
-            </div>
-        </div> --}}
-
         <!-- Contenido principal del footer -->
         <div class="lg:flex lg:justify-between">
             <!-- Información de la empresa -->
@@ -76,7 +58,7 @@
                 </div>
             </div>
 
-            <!-- Enlaces agrupados - Responsive mejorado -->
+            <!-- Enlaces agrupados -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 <!-- Política -->
                 <div>

@@ -69,6 +69,7 @@ Route::middleware('auth')->prefix('bookmart')->group(function () {
     Route::get('/perfil/mis-libros/{book}', [UserBookController::class, 'show'])->name('user.books.show');
 
     Route::get('/perfil/mis-libros/{book}/download', [UserBookController::class, 'downloadPdf'])->name('user.books.download');
+    Route::get('/perfil/mis-libros/{book}/view', [UserBookController::class, 'viewPdf'])->name('user.books.view');
 
     // RUTAS CARRITO DE COMPRAS
     Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
