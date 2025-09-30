@@ -2,10 +2,6 @@
 
 @section('titulo', $book->title)
 
-@push('styles')
-    @vite(['resources/css/components/pdf-viewer.css'])
-@endpush
-
 @section('contenido')
     <section class="my-5 md:my-10 container mx-auto px-3">
         <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-[#e9ecef]">
@@ -197,7 +193,6 @@
 @endsection
 
 @push('scripts')
-    @vite(['resources/js/components/pdf-viewer.js'])
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, initializing PDF viewer with brand colors...');

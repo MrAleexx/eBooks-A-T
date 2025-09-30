@@ -22,12 +22,7 @@
     </section>
 @endsection
 
-@push('styles')
-    @vite(['resources/css/components/book-card.css', 'resources/css/components/empty-state.css', 'resources/css/components/success-message.css'])
-@endpush
-
 @push('scripts')
-    @vite(['resources/js/components/success-message.js', 'resources/js/components/book-card.js'])
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar componentes
