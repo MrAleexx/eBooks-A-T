@@ -78,7 +78,7 @@
                 @auth
                     <!-- Cart -->
                     <a href="{{ route('cart.index') }}"
-                        class="relative p-2 bg-orange-400 hover:bg-orange-500 rounded-lg cursor-pointer
+                        class="relative p-4 bg-orange-400 hover:bg-orange-500 rounded-lg cursor-pointer
                               transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
                         <i class="fas fa-shopping-cart text-white text-lg"></i>
                         @if ($cartCount > 0)
@@ -241,10 +241,10 @@
                 @else
                     <!-- Guest Mobile -->
                     <div class="border-t border-gray-200 mt-3 pt-4 px-2">
-                        <div class="flex items-center px-4 py-3 text-gray-400 rounded-lg">
+                        {{-- <div class="flex items-center px-4 py-3 text-gray-400 rounded-lg">
                             <i class="fas fa-shopping-cart mr-3"></i>
                             Carrito (Inicia sesión)
-                        </div>
+                        </div> --}}
                         <a href="{{ route('login') }}" @click="mobileMenuOpen = false"
                             class="flex items-center justify-center bg-orange-400 text-white px-4 py-3 rounded-lg transition-colors duration-200 font-medium mt-2">
                             <i class="fas fa-sign-in-alt mr-2"></i>

@@ -2,6 +2,7 @@ import './bootstrap';
 import './components/pdf-viewer'; 
 import { SuccessMessage } from './components/success-message';
 import { BookCard } from './components/book-card';
+import './components/auth/ViewPassword';
 
 // Inicialización global
 document.addEventListener('DOMContentLoaded', function () {

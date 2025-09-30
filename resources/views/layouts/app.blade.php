@@ -27,7 +27,7 @@
             @yield('contenido')
         </main>
 
-        <footer class="bg-[#222222] mt-10">
+        <footer class="bg-[#222222]">
             @include('layouts.includes.footer')
         </footer>
 
