@@ -9,6 +9,7 @@
 @import "./components/auth/auth-alert.css";
 @import "./components/animations.css";
 @import './components/pdf-viewer.css';
+@import "./components/auth/register.css";
 
 body {
     font-family: "Poppins", sans-serif;

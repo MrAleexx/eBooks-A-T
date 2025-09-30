@@ -8,12 +8,7 @@
     </x-auth.layouts.auth-container>
 @endsection
 
-@push('styles')
-    @vite(['resources/css/components/auth/login.css', 'resources/css/components/auth/auth-form.css', 'resources/css/components/auth/auth-alert.css', 'resources/css/components/animations.css'])
-@endpush
-
 @push('scripts')
-    @vite(['resources/js/components/auth/LoginForm.js', 'resources/js/components/auth/AuthAlert.js', 'resources/js/components/auth/LoginParticles.js'])
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar formulario de login

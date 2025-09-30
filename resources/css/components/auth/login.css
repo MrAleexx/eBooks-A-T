@@ -28,7 +28,6 @@
     right: 0;
     bottom: 0;
     background: var(--banner-image) center/cover no-repeat;
-    /* background-size: 60%; */
     opacity: 0.8;
     filter: grayscale(0.3) brightness(0.8);
     z-index: 1;
@@ -173,30 +172,6 @@
     padding-bottom: 20px;
     border-bottom: 1px solid #e5e7eb; 
 }
-
-/* .login-logo {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 28px;
-    background: #ea9216;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 20px rgba(234, 146, 22, 0.25);
-    transition: transform 0.2s ease;
-}
-
-.login-logo:hover {
-    transform: scale(1.05);
-}
-
-.login-logo svg {
-    width: 36px;
-    height: 36px;
-    color: #ffffff;
-} */
-
 
 /* Responsive para login header */
 @media (max-width: 768px) {

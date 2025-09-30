@@ -1,145 +1,92 @@
 @extends('layouts.app')
 
-@section('titulo', 'Iniciar Sesión')
+@section('titulo', 'Registrarse')
 
 @section('contenido')
-    <div class="flex items-center justify-center my-15 px-3">
-        <div class="w-full max-w-md">
-            <h1 class="text-center text-2xl font-bold mb-1">Regístrate</h1>
-            <p class="text-sm text-gray-600 text-center mb-6">Por favor, ingresa tus datos para crear tu cuenta.</p>
+    <div class="register-container">
+        <!-- Sidebar izquierdo con fondo -->
+        <div class="register-background" style="--banner-image: url('{{ asset('img/banners/banner_AyT.jpg') }}')">
+            <div class="fallback-text">
+                <div class="banner-logo">BookSwap</div>
+                <h1 class="banner-title">Únete a nuestra comunidad de lectores y descubre un mundo de libros compartidos</h1>
+                <p class="banner-subtitle">"Donde las páginas encuentran nuevos lectores"</p>
+            </div>
+            <div id="particles" class="particles"></div>
+        </div>
 
-            <form class="w-full" action="{{ route('register.store') }}" method="POST">
-                @csrf
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="name" class="block mb-2 font-medium text-sm">
-                            Nombres
-                        </label>
-                        <input 
-                            id="name"
-                            name="name"
-                            type="text"
-                            placeholder="Pedro Cesar"
-                            class="w-full text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 @error('name') border-red-500 @enderror"
-                            value="{{ old('name') }}"
-                        />
-                        @error('name')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+        <!-- Sidebar derecho con formulario MÁS ANCHO -->
+        <div class="register-sidebar">
+            <div class="register-card">
+                <!-- Header -->
+                <div class="register-header">
+                    <h1 class="register-title">Crear Cuenta</h1>
+                    <p class="register-subtitle">Únete a nuestra comunidad de lectores</p>
+                </div>
+
+                <form id="registerForm" class="auth-form register-form" action="{{ route('register.store') }}"
+                    method="POST">
+                    @csrf
+
+                    <!-- Alertas de sesión -->
+                    @if (session('mensaje'))
+                        <x-auth.auth-alert type="error" :message="session('mensaje')" />
+                    @endif
+
+                    @if (session('mensaje_correcto'))
+                        <x-auth.auth-alert type="success" :message="session('mensaje_correcto')" />
+                    @endif
+
+                    <!-- Campos del formulario en grid responsive -->
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <x-auth.auth-input name="name" label="Nombres" type="text" placeholder="Pedro Cesar"
+                                required="true" value="{{ old('name') }}" :error="$errors->first('name')" />
+
+                            <x-auth.auth-input name="last_name" label="Apellidos" type="text" placeholder="San Julio"
+                                required="true" value="{{ old('last_name') }}" :error="$errors->first('last_name')" />
+                        </div>
+
+                        <div class="form-row">
+                            <x-auth.auth-input name="dni" label="DNI" type="text" placeholder="60606060"
+                                required="true" value="{{ old('dni') }}" :error="$errors->first('dni')" />
+
+                            <x-auth.auth-input name="phone" label="Teléfono" type="tel" placeholder="987654321"
+                                required="true" value="{{ old('phone') }}" :error="$errors->first('phone')" />
+                        </div>
                     </div>
-    
-                    <div class="mb-3">
-                        <label for="last_name" class="block mb-2 font-medium text-sm">
-                            Apellidos
-                        </label>
-                        <input 
-                            id="last_name" 
-                            name="last_name"
-                            type="name"
-                            placeholder="San Julio"
-                            value="{{ old('last_name') }}"
-                            class="w-full text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 @error('last_name') border-red-500 @enderror"
-                        />
-                        @error('last_name')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+
+                    <div class="form-full-width">
+                        <x-auth.auth-input name="email" label="Correo electrónico" type="email"
+                            placeholder="correo@ejemplo.com" required="true" value="{{ old('email') }}"
+                            :error="$errors->first('email')" />
+
+                        <x-auth.auth-input name="password" label="Contraseña" type="password" placeholder="••••••"
+                            required="true" :error="$errors->first('password')" />
+
+                        <x-auth.auth-input name="password_confirmation" label="Confirmar Contraseña" type="password"
+                            placeholder="••••••" required="true" />
                     </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="dni" class="block mb-2 font-medium text-sm">
-                            DNI
-                        </label>
-                        <input 
-                            id="dni"
-                            name="dni"
-                            type="text"
-                            placeholder="60606060"
-                            value="{{ old('dni') }}"
-                            class="w-full text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 @error('dni') border-red-500 @enderror"
-                        />
-                        @error('dni')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+
+                    <!-- Botones -->
+                    <div class="form-actions">
+                        <button type="submit" class="submit-button">
+                            Registrar Cuenta
+                        </button>
+
+                        <a href="{{ route('login') }}" class="cancel-button">
+                            Cancelar
+                        </a>
                     </div>
-    
-                    <div class="mb-3">
-                        <label for="phone" class="block mb-2 font-medium text-sm">
-                            Teléfono
-                        </label>
-                        <input 
-                            id="phone" 
-                            name="phone"
-                            type="tel"
-                            placeholder="987654321"
-                            value="{{ old('phone') }}"
-                            class="w-full text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 @error('phone') border-red-500 @enderror"
-                        />
-                        @error('phone')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+
+                    <!-- Enlace de login -->
+                    <div class="auth-link">
+                        <p class="auth-text">
+                            ¿Ya tienes una cuenta?
+                            <a href="{{ route('login') }}">Inicia sesión aquí</a>
+                        </p>
                     </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="email" class="block mb-2 font-medium text-sm">
-                        Correo electrónico
-                    </label>
-                    <input 
-                        id="email"
-                        name="email"
-                        type="text"
-                        placeholder="correo@correo.com"
-                        value="{{ old('email') }}"
-                        class="w-full text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 @error('email') border-red-500 @enderror"
-                    />
-                    @error('email')
-                        <p class="text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="password" class="block mb-2 font-medium text-sm">
-                        Contraseña
-                    </label>
-                    <input 
-                        id="password" 
-                        name="password"
-                        type="password"
-                        placeholder="******"
-                        class="w-full text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 @error('email') border-red-500 @enderror"
-                    />
-                    @error('password')
-                        <p class="text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="password_confirmation" class="block mb-2 font-medium text-sm">
-                        Confirmar Contraseña
-                    </label>
-                    <input
-                        id="password_confirmation"
-                        name="password_confirmation"
-                        type="password"
-                        placeholder="******"
-                        class="w-full text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                </div>
-
-                <div class="flex flex-col md:flex-row">
-                    <button
-                        type="submit"
-                        class="text-sm font-medium shadow mt-3 w-full bg-orange-500 text-white py-2.5 rounded-lg hover:bg-orange-600 transition-colors duration-300 cursor-pointer"
-                    >
-                        Registrar Cuenta
-                    </button>
-
-                    <a href="{{ route('login') }}" class="text-sm ml-0 md:ml-4 font-medium shadow-2xl text-center mt-3 w-full bg-gray-300 py-2.5 rounded-lg hover:bg-gray-400 transition-colors duration-300 cursor-pointer">
-                        Cancelar
-                    </a>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 @endsection
