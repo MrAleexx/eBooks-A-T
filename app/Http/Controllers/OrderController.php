@@ -44,11 +44,6 @@ class OrderController extends Controller
                 $order->payment->voucher_exists = true;
             } else {
                 $order->payment->voucher_exists = false;
-                \Log::warning("Voucher not found for order #{$order->id}", [
-                    'voucher_path' => $order->payment->voucher_image,
-                    'storage_path' => $storagePath,
-                    'public_path' => $publicPath
-                ]);
             }
         }
 

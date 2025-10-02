@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\CartService;   
+use App\Services\CartService;
 use App\Services\OrderService;
 use Illuminate\Support\ServiceProvider;
 
