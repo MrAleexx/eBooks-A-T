@@ -1,3 +1,5 @@
+<!--resource/views/admin/ordes/show.blade.php -->
+
 @extends('admin.layout')
 
 @section('title', 'Detalles de la Orden')
@@ -10,7 +12,7 @@
             <div class="flex space-x-2">
                 <a href="{{ route('admin.orders.edit', $order) }}"
                     class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200">
-                    ✏️ Editar
+                    ✏ Editar
                 </a>
                 <a href="{{ route('admin.orders.index') }}"
                     class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors duration-200">
@@ -71,12 +73,12 @@
                                     <div class="flex items-center">
                                         @if ($detail->book->image)
                                             <x-book-image :image="$detail->book->image" :title="$detail->book->title"
-                                                class="w-16 h-20 object-cover rounded mr-4"/>
-                                            @else
-                                                <div
-                                                    class="w-16 h-20 bg-gray-200 rounded flex items-center justify-center mr-4">
-                                                    📖
-                                                </div>
+                                                class="w-16 h-20 object-cover rounded mr-4" />
+                                        @else
+                                            <div
+                                                class="w-16 h-20 bg-gray-200 rounded flex items-center justify-center mr-4">
+                                                📖
+                                            </div>
                                         @endif
                                         <div>
                                             <h5 class="font-semibold">{{ $detail->book->title }}</h5>
@@ -87,7 +89,8 @@
                                     <div class="text-right">
                                         <p class="font-semibold">S/ {{ number_format($detail->subtotal, 2) }}</p>
                                         <p class="text-sm text-gray-600">S/
-                                            {{ number_format($detail->subtotal / $detail->quantity, 2) }} c/u</p>
+                                            {{ number_format($detail->subtotal / $detail->quantity, 2) }} c/u
+                                        </p>
                                     </div>
                                 </div>
                             @endforeach
@@ -131,6 +134,15 @@
                             class="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 block text-center">
                             Ver Perfil del Cliente
                         </a>
+
+                        @if ($order->payment && $order->status === 'paid' && $order->payment->status === 'confirmed')
+                            <div class="mt-4">
+                                <a href="{{ route('admin.orders.generateInvoice', $order) }}"
+                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 block text-center">
+                                    Visualizar Boleta
+                                </a>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Información de Pago -->

@@ -104,8 +104,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Gestión de órdenes
     Route::resource('orders', AdminOrderController::class);
+
     Route::post('orders/{order}/update-payment-status', [AdminOrderController::class, 'updatePaymentStatus'])
         ->name('orders.updatePaymentStatus');
+
+    Route::get('orders/{order}/invoice', [AdminOrderController::class, 'generateInvoice'])
+        ->name('orders.generateInvoice');
+
+    Route::get('orders/{order}/download-invoice-pdf', [AdminOrderController::class, 'downloadInvoicePdf'])
+        ->name('orders.downloadInvoicePdf');
+
+    Route::post('orders/{order}/send-invoice-email', [AdminOrderController::class, 'sendInvoiceEmail'])
+        ->name('orders.sendInvoiceEmail');
 
     // Gestión de reclamos
     Route::get('/claims', [ClaimsController::class, 'index'])->name('claims.index');
