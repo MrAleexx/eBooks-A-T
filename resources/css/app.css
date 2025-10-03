@@ -10,6 +10,7 @@
 @import "./components/animations.css";
 @import './components/pdf-viewer.css';
 @import "./components/auth/register.css";
+@import './layouts/book-information.css';
 
 body {
     font-family: "Poppins", sans-serif;

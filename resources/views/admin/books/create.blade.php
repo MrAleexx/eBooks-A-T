@@ -1,3 +1,4 @@
+{{-- resources/views/admin/books/create.blade.php --}}
 @extends('admin.layout')
 
 @section('title', 'Crear Nuevo Libro')
@@ -18,6 +19,14 @@
                 'method' => 'POST',
                 'book' => null,
             ])
+
+            <div class="mt-8">
+                @include('admin.books.partials.contributors-form', ['book' => null])
+            </div>
+
+            <div class="mt-8">
+                @include('admin.books.partials.initial-contents-form', ['book' => null])
+            </div>
         </div>
     </div>
 @endsection

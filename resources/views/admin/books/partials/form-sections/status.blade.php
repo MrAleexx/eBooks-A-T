@@ -45,17 +45,5 @@
                 Pre-orden
             </span>
         </label>
-
-        {{-- AGREGAR ESTE CHECKBOX --}}
-        <label class="flex items-center">
-            <input type="checkbox" name="screen_reader_supported" value="1"
-                class="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
-                {{ old('screen_reader_supported', $book->screen_reader_supported ?? true) ? 'checked' : '' }}>
-            <span class="ml-2 text-sm text-gray-700 flex items-center">
-                <i class="fas fa-universal-access mr-2 text-blue-500"></i>
-                Lector Pantalla
-            </span>
-        </label>
     </div>
 </div>
-    

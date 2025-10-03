@@ -75,34 +75,6 @@
         </div>
     @endif
 
-    <!-- Características de Accesibilidad -->
-    <div class="bg-blue-50 p-4 rounded-lg">
-        <h4 class="text-sm font-medium text-blue-700 mb-3 flex items-center">
-            <i class="fas fa-universal-access text-blue-600 mr-2"></i>
-            Características de Accesibilidad
-        </h4>
-        <div class="flex flex-wrap gap-4 text-sm">
-            <div class="flex items-center">
-                <span
-                    class="w-2 h-2 rounded-full {{ $book->screen_reader_supported ? 'bg-green-500' : 'bg-gray-300' }} mr-2"></span>
-                <span
-                    class="{{ $book->screen_reader_supported ? 'text-green-700' : 'text-gray-500' }} flex items-center">
-                    <i class="fas fa-assistive-listening-systems mr-2"></i>
-                    Lector de Pantalla
-                </span>
-            </div>
-
-            @if ($book->accessibility_features)
-                @foreach ($book->accessibility_features as $feature)
-                    <div class="flex items-center">
-                        <span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
-                        <span class="text-blue-700">{{ $feature }}</span>
-                    </div>
-                @endforeach
-            @endif
-        </div>
-    </div>
-
     <!-- Estados del Libro -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div

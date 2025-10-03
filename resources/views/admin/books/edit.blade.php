@@ -1,4 +1,3 @@
-{{-- resources/views/admin/books/edit.blade.php --}}
 @extends('admin.layout')
 
 @section('title', 'Editar Libro')
@@ -21,13 +20,13 @@
             ])
 
             <!-- Gestión de Contribuidores -->
-            <div class="mt-8">
-                <livewire:book-contributors-manager :book="$book" />
+            <div class="mt-8" wire:ignore>
+                @livewire('book-contributors-manager', ['book' => $book], key('contributors-' . $book->id))
             </div>
 
             <!-- Gestión de Contenido -->
-            <div class="mt-8">
-                <livewire:book-contents-manager :book="$book" />
+            <div class="mt-8" wire:ignore>
+                @livewire('book-contents-manager', ['book' => $book], key('contents-' . $book->id))
             </div>
         </div>
     </div>

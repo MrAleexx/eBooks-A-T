@@ -1,5 +1,4 @@
 <?php
-// app/Livewire/BookContributorsManager.php
 
 namespace App\Livewire;
 
@@ -23,8 +22,8 @@ class BookContributorsManager extends Component
     ];
 
     protected $rules = [
-        'form.contributor_type' => 'required|in:author,editor,translator',
-        'form.full_name' => 'required|string|max:200',
+        'form.contributor_type' => 'required|in:author,editor,translator,illustrator',
+        'form.full_name' => 'required|string|max:255',
         'form.email' => 'nullable|email',
         'form.sequence_number' => 'required|integer|min:1',
         'form.biographical_note' => 'nullable|string'
@@ -48,15 +47,19 @@ class BookContributorsManager extends Component
     {
         $this->validate();
 
-        BookContributor::create(array_merge($this->form, [
-            'book_id' => $this->book->id
-        ]));
+        try {
+            BookContributor::create(array_merge($this->form, [
+                'book_id' => $this->book->id
+            ]));
 
-        $this->resetForm();
-        $this->loadContributors();
-        $this->showForm = false;
+            $this->resetForm();
+            $this->loadContributors();
+            $this->showForm = false;
 
-        $this->dispatch('contributor-added');
+            session()->flash('message', 'Contribuidor agregado exitosamente.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al agregar contribuidor: ' . $e->getMessage());
+        }
     }
 
     public function editContributor($index)
@@ -77,23 +80,31 @@ class BookContributorsManager extends Component
     {
         $this->validate();
 
-        $contributor = BookContributor::find($this->contributors[$this->editingIndex]['id']);
-        $contributor->update($this->form);
+        try {
+            $contributor = BookContributor::find($this->contributors[$this->editingIndex]['id']);
+            $contributor->update($this->form);
 
-        $this->resetForm();
-        $this->loadContributors();
-        $this->showForm = false;
+            $this->resetForm();
+            $this->loadContributors();
+            $this->showForm = false;
 
-        $this->dispatch('contributor-updated');
+            session()->flash('message', 'Contribuidor actualizado exitosamente.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al actualizar contribuidor: ' . $e->getMessage());
+        }
     }
 
     public function deleteContributor($index)
     {
-        $contributor = BookContributor::find($this->contributors[$index]['id']);
-        $contributor->delete();
+        try {
+            $contributor = BookContributor::find($this->contributors[$index]['id']);
+            $contributor->delete();
 
-        $this->loadContributors();
-        $this->dispatch('contributor-deleted');
+            $this->loadContributors();
+            session()->flash('message', 'Contribuidor eliminado exitosamente.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al eliminar contribuidor: ' . $e->getMessage());
+        }
     }
 
     public function resetForm()

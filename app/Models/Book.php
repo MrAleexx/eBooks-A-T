@@ -1,16 +1,19 @@
 <?php
+// app/Models/Book.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Book extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         // Información Básica
         'title',
-        'author',
         'description',
 
         // Identificadores
@@ -18,7 +21,7 @@ class Book extends Model
         'isbn13',
         'deposito_legal',
 
-        // Información Editorial - TODOS LOS CAMPOS
+        // Información Editorial
         'publisher',
         'publisher_address',
         'publisher_email',
@@ -31,8 +34,6 @@ class Book extends Model
         'edition',
         'file_format',
         'file_size',
-        'screen_reader_supported',
-        'accessibility_features',
 
         // Información Comercial
         'price',
@@ -60,8 +61,7 @@ class Book extends Model
         'active' => 'boolean',
         'downloadable' => 'boolean',
         'pre_order' => 'boolean',
-        'screen_reader_supported' => 'boolean',
-        'accessibility_features' => 'array',
+
     ];
 
     // Relación con contribuidores
@@ -76,32 +76,56 @@ class Book extends Model
         return $this->hasMany(BookContent::class);
     }
 
-    // Accesor para el autor principal (compatibilidad hacia atrás)
-    public function getMainAuthorAttribute()
+    // Obtener todos los autores
+    public function getAllAuthorsAttribute(): string
     {
-        return $this->author;
+        $authors = $this->contributors()
+            ->where('contributor_type', 'author')
+            ->orderBy('sequence_number')
+            ->pluck('full_name');
+
+        return $authors->isNotEmpty() ? $authors->implode(', ') : 'Sin autor';
     }
 
-    // Accesor para obtener todos los autores
-    public function getAllAuthorsAttribute()
+    // Obtener autor principal (ÚNICA VERSIÓN)
+    public function getMainAuthorAttribute(): ?string
     {
-        if ($this->contributors->where('contributor_type', 'author')->count() > 0) {
-            return $this->contributors->where('contributor_type', 'author')
-                ->sortBy('sequence_number')
-                ->pluck('full_name')
-                ->implode(', ');
-        }
+        $mainAuthor = $this->contributors()
+            ->where('contributor_type', 'author')
+            ->orderBy('sequence_number')
+            ->first();
 
-        return $this->author;
+        return $mainAuthor?->full_name;
     }
 
-    // Accesor para editores
-    public function getEditorsAttribute()
+    // Obtener editores
+    public function getEditorsAttribute(): string
     {
-        return $this->contributors->where('contributor_type', 'editor')
-            ->sortBy('sequence_number')
-            ->pluck('full_name')
-            ->implode(', ');
+        $editors = $this->contributors()
+            ->where('contributor_type', 'editor')
+            ->orderBy('sequence_number')
+            ->pluck('full_name');
+
+        return $editors->isNotEmpty() ? $editors->implode(', ') : '';
+    }
+
+    // Método para agregar autores fácilmente
+    public function addAuthor(string $name, int $sequence = 1): BookContributor
+    {
+        return $this->contributors()->create([
+            'contributor_type' => 'author',
+            'full_name' => $name,
+            'sequence_number' => $sequence
+        ]);
+    }
+
+    // Método para obtener contribuidores por tipo
+    public function getContributorsByType(string $type)
+    {
+        return $this->contributors()
+            ->where('contributor_type', $type)
+            ->orderBy('sequence_number')
+            ->get();
     }
 
     // Scope para libros activos

@@ -1,6 +1,5 @@
 import { LoginParticles } from '../LoginParticles.js';
 import { FormValidator } from '../Auth/Utils/FormValidator.js';
-import { AuthAlert } from '../Auth/AuthAlert.js';
 
 export class RegisterForm {
     constructor() {
