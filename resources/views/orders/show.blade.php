@@ -1,3 +1,4 @@
+{{-- resources/views/orders/show.blade.php --}}
 @extends('layouts.app')
 
 @section('titulo', 'Detalle del Pedido #' . $order->id)
@@ -214,32 +215,139 @@
                 </div>
             </div>
 
-            <!-- Columna derecha - Comprobante y acciones -->
+            <!-- Columna derecha - Comprobantes y acciones -->
             <div class="space-y-6 lg:space-y-8">
-                @if ($order->payment && $order->payment->voucher_image)
-                    <!-- Comprobante de pago -->
-                    <div
-                        class="bg-white rounded-2xl shadow-sm border border-[#272b30]/10 p-5 sm:p-6 hover:shadow-md transition-shadow duration-300">
-                        <div class="flex items-center gap-3 mb-4 sm:mb-6">
-                            <div class="bg-green-100 p-2 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h2 class="text-xl sm:text-2xl font-bold text-[#04050E]">Comprobante de Pago</h2>
+                <!-- Comprobantes de Pago -->
+                <div
+                    class="bg-white rounded-2xl shadow-sm border border-[#272b30]/10 p-5 sm:p-6 hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center gap-3 mb-4 sm:mb-6">
+                        <div class="bg-green-100 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-[#04050E]">Comprobantes de Pago</h2>
+                    </div>
 
-                        <div class="text-center">
-                            <div
-                                class="bg-gradient-to-br from-[#272b30]/5 to-white rounded-xl p-4 mb-4 border border-[#272b30]/10">
-                                <img src="{{ Storage::url($order->payment->voucher_image) }}" alt="Comprobante de pago"
-                                    class="w-full max-w-xs mx-auto rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-zoom-in"
-                                    onclick="openModal('{{ Storage::url($order->payment->voucher_image) }}')">
+                    <div class="space-y-6">
+                        <!-- Comprobante del Cliente -->
+                        @if ($order->payment && $order->payment->voucher_image)
+                            <div class="border border-blue-200 rounded-xl p-4 bg-blue-50">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <h3 class="font-semibold text-blue-900">Tu Comprobante</h3>
+                                </div>
+
+                                @if (in_array(pathinfo($order->payment->voucher_image, PATHINFO_EXTENSION), ['pdf']))
+                                    <div
+                                        class="flex items-center justify-center p-4 bg-white rounded-lg border border-blue-200 mb-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500 mr-3"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Documento PDF</p>
+                                            <p class="text-xs text-gray-500">Comprobante que subiste</p>
+                                        </div>
+                                    </div>
+                                @else
+                                    <img src="{{ Storage::url($order->payment->voucher_image) }}"
+                                        alt="Comprobante de pago"
+                                        class="w-full rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-zoom-in mb-3"
+                                        onclick="openModal('{{ Storage::url($order->payment->voucher_image) }}')">
+                                @endif
+
+                                <a href="{{ Storage::url($order->payment->voucher_image) }}" target="_blank"
+                                    class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    Ver Comprobante Completo
+                                </a>
                             </div>
+                        @endif
 
-                            <p class="text-[#272b30]/70 text-sm mb-6">
+                        <!-- Comprobante Interno de la Empresa -->
+                        @if ($order->payment && $order->payment->internal_voucher)
+                            <div class="border border-green-200 rounded-xl p-4 bg-green-50">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    <h3 class="font-semibold text-green-900">Comprobante de la Empresa</h3>
+                                </div>
+
+                                <div class="mb-3">
+                                    <p class="text-sm text-green-800 mb-2">
+                                        Comprobante oficial emitido por nuestra empresa
+                                    </p>
+                                    <p class="text-xs text-green-700">
+                                        Emitido el:
+                                        {{ $order->payment->internal_voucher_uploaded_at->format('d/m/Y H:i') }}
+                                    </p>
+                                </div>
+
+                                @if (pathinfo($order->payment->internal_voucher, PATHINFO_EXTENSION) === 'pdf')
+                                    <div
+                                        class="flex items-center justify-center p-4 bg-white rounded-lg border border-green-200 mb-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500 mr-3"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Comprobante PDF Oficial</p>
+                                            <p class="text-xs text-gray-500">Documento interno de la empresa</p>
+                                        </div>
+                                    </div>
+                                @else
+                                    <img src="{{ Storage::url($order->payment->internal_voucher) }}"
+                                        alt="Comprobante interno de pago"
+                                        class="w-full rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-zoom-in mb-3"
+                                        onclick="openModal('{{ Storage::url($order->payment->internal_voucher) }}')">
+                                @endif
+
+                                <a href="{{ Storage::url($order->payment->internal_voucher) }}" target="_blank"
+                                    class="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center justify-center gap-2 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    Ver Comprobante Oficial
+                                </a>
+                            </div>
+                        @else
+                            <!-- Estado cuando no hay comprobante interno -->
+                            <div class="border border-gray-200 rounded-xl p-4 bg-gray-50 text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400 mx-auto mb-2"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <p class="text-sm text-gray-600">Comprobante interno en proceso</p>
+                                <p class="text-xs text-gray-500 mt-1">La empresa emitirá el comprobante oficial pronto</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Botones de acción -->
+                    @if ($order->payment && $order->payment->voucher_image)
+                        <div class="mt-6 pt-4 border-t border-[#272b30]/10">
+                            <p class="text-[#272b30]/70 text-sm mb-4 text-center">
                                 Comprobante verificado. Ya puedes reclamar tus libros.
                             </p>
 
@@ -283,13 +391,13 @@
                                 </a>
                             </div>
 
-                            <p class="text-xs text-[#272b30]/60 mt-4">
+                            <p class="text-xs text-[#272b30]/60 mt-4 text-center">
                                 También puedes enviar un correo directamente a:
                                 <strong class="text-[#052f5a]">alextaya@hotmail.com</strong>
                             </p>
                         </div>
-                    </div>
-                @endif
+                    @endif
+                </div>
 
                 <!-- Información de contacto -->
                 <div class="bg-gradient-to-br from-[#052f5a] to-[#041f3f] rounded-2xl p-5 sm:p-6 text-white shadow-lg">

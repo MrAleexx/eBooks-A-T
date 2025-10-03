@@ -83,6 +83,7 @@ Route::middleware('auth')->prefix('bookmart')->group(function () {
     Route::get('/carrito/checkout/correo', [CartController::class, 'correo'])->name('cart.correo');
     Route::post('/carrito/checkout/correo-enviar', [CartController::class, 'enviarCorreo'])->name('cart.enviarCorreo');
 
+
     Route::post('/carrito/procesar-pedido', [CartController::class, 'processCheckout'])->name('cart.process');
 
     // RUTAS ORDENES - PEDIDOS
@@ -116,6 +117,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::post('orders/{order}/send-invoice-email', [AdminOrderController::class, 'sendInvoiceEmail'])
         ->name('orders.sendInvoiceEmail');
+
+    Route::put('orders/{order}/upload-internal-voucher', [AdminOrderController::class, 'uploadInternalVoucher'])
+        ->name('orders.uploadInternalVoucher');
+
+    Route::delete('orders/{order}/delete-internal-voucher', [AdminOrderController::class, 'deleteInternalVoucher'])
+        ->name('orders.deleteInternalVoucher');
 
     // Gestión de reclamos
     Route::get('/claims', [ClaimsController::class, 'index'])->name('claims.index');

@@ -351,4 +351,101 @@ class OrderController extends Controller
 
         return trim($letras);
     }
+
+    public function uploadInternalVoucher(Request $request, Order $order)
+    {
+        $this->authorize('update', $order);
+
+        $validated = $request->validate([
+            'internal_voucher' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120', // 5MB
+        ]);
+
+        try {
+            // Procesar el archivo
+            if ($request->hasFile('internal_voucher')) {
+                $file = $request->file('internal_voucher');
+                $fileName = 'internal_voucher_' . $order->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('internal_vouchers', $fileName, 'public');
+
+                // Actualizar o crear el pago
+                if ($order->payment) {
+                    // Eliminar archivo anterior si existe
+                    if ($order->payment->internal_voucher) {
+                        Storage::disk('public')->delete($order->payment->internal_voucher);
+                    }
+
+                    $order->payment->update([
+                        'internal_voucher' => $filePath,
+                        'internal_voucher_uploaded_by' => auth()->id(),
+                        'internal_voucher_uploaded_at' => now(),
+                        'status' => 'confirmed' // Confirmar automáticamente al subir comprobante interno
+                    ]);
+                } else {
+                    // Crear nuevo pago
+                    $order->payment()->create([
+                        'internal_voucher' => $filePath,
+                        'internal_voucher_uploaded_by' => auth()->id(),
+                        'internal_voucher_uploaded_at' => now(),
+                        'payment_method' => 'interno',
+                        'amount' => $order->orderDetails->sum('subtotal'),
+                        'payment_date' => now(),
+                        'status' => 'confirmed'
+                    ]);
+                }
+
+                // Actualizar estado de la orden
+                $order->update(['status' => 'paid']);
+
+                \Log::info('Comprobante interno subido para orden', [
+                    'order_id' => $order->id,
+                    'file_path' => $filePath,
+                    'user_id' => auth()->id()
+                ]);
+
+                return redirect()->route('admin.orders.show', $order)
+                    ->with('success', 'Comprobante interno subido exitosamente.');
+            }
+
+            return back()->with('error', 'No se pudo subir el comprobante interno.');
+        } catch (\Exception $e) {
+            \Log::error('Error al subir comprobante interno: ' . $e->getMessage());
+            return back()->with('error', 'Error al subir el comprobante interno: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Eliminar comprobante interno de pago
+     */
+    public function deleteInternalVoucher(Order $order)
+    {
+        $this->authorize('update', $order);
+
+        try {
+            if ($order->payment && $order->payment->internal_voucher) {
+                // Eliminar archivo
+                Storage::disk('public')->delete($order->payment->internal_voucher);
+
+                // Actualizar registro
+                $order->payment->update([
+                    'internal_voucher' => null,
+                    'internal_voucher_uploaded_by' => null,
+                    'internal_voucher_uploaded_at' => null,
+                    'status' => $order->payment->voucher_image ? 'confirmed' : 'pending'
+                ]);
+
+                \Log::info('Comprobante interno eliminado para orden', [
+                    'order_id' => $order->id,
+                    'user_id' => auth()->id()
+                ]);
+
+                return redirect()->route('admin.orders.show', $order)
+                    ->with('success', 'Comprobante interno eliminado exitosamente.');
+            }
+
+            return back()->with('error', 'No hay comprobante interno para eliminar.');
+        } catch (\Exception $e) {
+            \Log::error('Error al eliminar comprobante interno: ' . $e->getMessage());
+            return back()->with('error', 'Error al eliminar el comprobante interno: ' . $e->getMessage());
+        }
+    }
 }
