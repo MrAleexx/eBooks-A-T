@@ -1,168 +1,240 @@
+{{-- resources/views/book/information.blade.php --}}
 @extends('layouts.app')
 
-@section('titulo', 'Página Principal')
+@section('titulo', $book->title . ' - Grupo A&T')
 
 @section('contenido')
-    <section class="my-10 container mx-auto px-3">
-        <div class="w-full mt-5">
-            <div class="max-w-4xl rounded-lg grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 px-6">
-                <div class="relative flex justify-center md:justify-start"> {{-- Centrar en móvil --}}
-                    <x-book-image :image="$book->image" :title="$book->title" class="w-40 h-56 rounded-lg shadow-md" />
-                    @if ($book->is_new)
-                        <span
-                            class="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                            Nuevo
-                        </span>
-                    @endif
-                </div>
-
-                <div class="flex flex-col justify-between">
-                    <div>
-                        <h2 class="text-2xl font-bold">{{ $book->title }}</h2>
-                        <p class="text-gray-600">{{ $book->author }}</p>
-                        <p class="text-2xl text-gray-950 font-semibold mt-4">S/ {{ number_format($book->price, 2) }}</p>
+    <section class="container mx-auto px-4 sm:px-6 py-6 md:py-8 lg:py-10">
+        <!-- Header del libro -->
+        <div class="max-w-6xl mx-auto">
+            <!-- Información principal del libro -->
+            <div class="book-card">
+                <div class="book-grid">
+                    <!-- Imagen del libro -->
+                    <div class="book-image-container">
+                        <div class="relative">
+                            <x-book-image :image="$book->image" :title="$book->title"
+                                class="book-cover-image" />
+                            @if ($book->is_new)
+                                <span class="new-badge">
+                                    <i class="fas fa-star mr-1"></i>¡NUEVO!
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
-                    <div class="mt-6">
-                        <div class="flex items-center gap-2">
-                            <form action="{{ route('cart.add', $book) }}" method="POST">
+                    <!-- Información del libro -->
+                    <div class="book-info-content">
+                        <div>
+                            <div class="book-header">
+                                <h1 class="book-title">{{ $book->title }}</h1>
+                                <p class="book-author">
+                                    <i class="fas fa-user-edit author-icon"></i>
+                                    por {{ $book->all_authors }}
+                                </p>
+                            </div>
+
+                            <!-- Precio y etiquetas -->
+                            <div class="price-section">
+                                <div class="price-tags">
+                                    <span class="book-price">S/ {{ number_format($book->price, 2) }}</span>
+                                    @if ($book->is_new)
+                                        <span class="new-tag">
+                                            <i class="fas fa-bolt mr-1"></i>Novedad
+                                        </span>
+                                    @endif
+                                </div>
+                                <p class="tax-info">
+                                    <i class="fas fa-receipt tax-icon"></i>
+                                    Incluye IGV según Ley N.° 31893
+                                </p>
+                            </div>
+
+                            <!-- Formulario de compra -->
+                            <form action="{{ route('cart.add', $book) }}" method="POST" class="purchase-form">
                                 @csrf
-                                <button type="submit"
-                                    class="cursor-pointer bg-orange-400 hover:bg-orange-500 text-white px-5 py-2 rounded-md font-semibold transition-colors duration-300">
-                                    AÑADIR AL CARRITO
-                                </button>
-                                <input type="number" name="quantity" value="1" min="1" max="5"
-                                    class="w-16 border rounded-md p-2 text-center" />
+                                <div class="form-controls">
+                                    <div class="quantity-control-group">
+                                        <label class="quantity-label">
+                                            <i class="fas fa-cubes mr-1"></i>Cantidad:
+                                        </label>
+                                        <div class="quantity-control-wrapper">
+                                            <button type="button" class="quantity-btn decrement">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input type="number" id="quantity" name="quantity" value="1"
+                                                min="1" max="5" class="quantity-input">
+                                            <button type="button" class="quantity-btn increment">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="add-to-cart-btn">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        AÑADIR AL CARRITO
+                                    </button>
+                                </div>
                             </form>
                         </div>
 
-                        <div class="mt-4 flex flex-col gap-2 text-blue-900 text-sm font-medium">
-                            {{-- <a href="#" class="hover:underline">Añadir comentario</a> --}}
-                            <a href="#" class="hover:underline">Compartir</a>
+                        <!-- Acciones secundarias -->
+                        <div class="secondary-actions">
+                            <button class="action-btn share-btn">
+                                <i class="fas fa-share-alt"></i>
+                                Compartir
+                            </button>
+                            <button class="action-btn wishlist-btn">
+                                <i class="far fa-heart"></i>
+                                Guardar en favoritos
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="max-w-4xl px-6 mt-10">
-                <div class="flex gap-4 border-b border-gray-400 pb-2">
-                    <a href=""
-                        class="text-blue-900 font-semibold hover:text-blue-700 transition-colors duration-300 text-xl">Más
-                        Informacion</a>
-                    {{-- <a href="" class="text-gray-900 font-semibold hover:text-gray-700 transition-colors duration-300 text-xl">Comentarios</a> --}}
+            <!-- Navegación de pestañas -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <nav class="tabs-nav">
+                        <button id="tab-info" class="tab-button active" data-tab="info">
+                            <i class="fas fa-info-circle"></i>
+                            Información General
+                        </button>
+                        <button id="tab-details" class="tab-button" data-tab="details">
+                            <i class="fas fa-clipboard-list"></i>
+                            Detalles del Producto
+                        </button>
+                        <button id="tab-index" class="tab-button" data-tab="index">
+                            <i class="fas fa-list-ol"></i>
+                            Índice General
+                        </button>
+                    </nav>
                 </div>
 
-                <div class="mt-5">
-                    <h5 class="mt-2 text-blue-900 font-semibold">Resumen:</h5>
-                    <p class="text-sm">{{ $book->description }}</p>
-                    <h5 class="mt-4 text-blue-900 font-semibold">Detalles de producto</h5>
-                    <ul class="mt-1 space-y-1">
-                        <li class="flex text-sm">
-                            <span class="w-40">Peso:</span>
-                            <strong class="text-blue-900">0.5kg</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">Nombre del autor:</span>
-                            <strong class="text-blue-900">{{ $book->author }}</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">Editorial:</span>
-                            <strong class="text-blue-900">{{ $book->editorial }}</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">Alto:</span>
-                            <strong class="text-blue-900">24.00 cm</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">Ancho:</span>
-                            <strong class="text-blue-900">17.00 cm</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">Saga:</span>
-                            <strong class="text-blue-900">Educación</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">Formato:</span>
-                            <strong class="text-blue-900">{{ $book->format }}</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">Número de Páginas:</span>
-                            <strong class="text-blue-900">{{ $book->pages }}</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">ISBN:</span>
-                            <strong class="text-blue-900">{{ $book->isbn }}</strong>
-                        </li>
-                        <li class="flex text-sm">
-                            <span class="w-40">ASIN:</span>
-                            <strong class="text-blue-900">B0FPMX34B2</strong>
-                        </li>
-                    </ul>
+                <!-- Contenido de pestañas -->
+                <div class="tabs-content">
+                    <!-- Pestaña Información General -->
+                    <div id="content-info" class="tab-content active">
+                        <div class="content-section">
+                            <h3 class="content-title">
+                                <i class="fas fa-file-alt title-icon"></i>
+                                Resumen
+                            </h3>
+                            <div class="book-description">
+                                {!! $book->description !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pestaña Detalles del Producto -->
+                    <div id="content-details" class="tab-content">
+                        <div class="details-grid">
+                            <div class="details-column">
+                                <div class="detail-item">
+                                    <span class="detail-label">
+                                        <i class="fas fa-user-edit detail-icon"></i>
+                                        Autor:
+                                    </span>
+                                    <strong class="detail-value">{{ $book->all_authors }}</strong>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">
+                                        <i class="fas fa-building detail-icon"></i>
+                                        Editorial:
+                                    </span>
+                                    <strong class="detail-value">{{ $book->publisher }}</strong>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">
+                                        <i class="fas fa-file-pdf detail-icon"></i>
+                                        Formato:
+                                    </span>
+                                    <strong class="detail-value">{{ $book->file_format }}</strong>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">
+                                        <i class="fas fa-file-text detail-icon"></i>
+                                        Páginas:
+                                    </span>
+                                    <strong class="detail-value">{{ $book->pages }}</strong>
+                                </div>
+                            </div>
+                            <div class="details-column">
+                                <div class="detail-item">
+                                    <span class="detail-label">
+                                        <i class="fas fa-barcode detail-icon"></i>
+                                        ISBN:
+                                    </span>
+                                    <strong class="detail-value">{{ $book->isbn }}</strong>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">
+                                        <i class="fas fa-language detail-icon"></i>
+                                        Idioma:
+                                    </span>
+                                    <strong class="detail-value">{{ $book->language }}</strong>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">
+                                        <i class="fas fa-layer-group detail-icon"></i>
+                                        Edición:
+                                    </span>
+                                    <strong class="detail-value">{{ $book->edition }}</strong>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">
+                                        <i class="fas fa-calendar-alt detail-icon"></i>
+                                        Publicación:
+                                    </span>
+                                    <strong class="detail-value">{{ $book->publication->format('d/m/Y') }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pestaña Índice General -->
+                    <div id="content-index" class="tab-content">
+                        <h3 class="content-title">
+                            <i class="fas fa-sitemap title-icon"></i>
+                            Índice General
+                        </h3>
+                        <div class="index-content">
+                            @if ($book->contents->count() > 0)
+                                @foreach ($book->contents as $content)
+                                    <div class="index-item" style="margin-left: {{ ($content->level - 1) * 1.5 }}rem">
+                                        <div class="index-bullet"></div>
+                                        <span class="index-text">{{ $content->chapter_title }}</span>
+                                        @if ($content->page_start)
+                                            <span class="page-number">- Pág. {{ $content->page_start }}</span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="no-index">
+                                    <i class="fas fa-list-alt no-index-icon"></i>
+                                    <p class="no-index-text">Índice no disponible</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="px-6 mt-10">
-            <h1 class="text-xl font-bold mb-6 text-blue-900">Índice General</h1>
-
-
-<ul class="list-disc list-inside space-y-2 text-sm">
-<li>Créditos</li>
-<li>Dedicatoria</li>
-<li>Autores</li>
-<li>Presentación</li>
-<li>Índice General</li>
-<li class="list-none">1. Ingresando a trabajar con ChatGPT</li>
-<li class="list-none">2. ¿Qué es un Prompt?</li>
-<li class="list-none">3. ¿Qué es un Prompt Maestro?</li>
-<li class="list-none">4. Cómo usar los prompts en ChatGPT</li>
-<li class="list-none">
-5. Nivel Inicial
-<ul class="list-disc list-inside ml-6 space-y-1">
-<li>Banco de Prompts por Áreas Curriculares (140)</li>
-   <ul class="ml-6">
-    <li class="flex items-center gap-2"> <span class="w-2 h-2 border border-black rounded-full bg-white"></span> Personal Social</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Psicomotriz</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Comunicación</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Castellano como Segunda Lengua</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Descubrimiento del Mundo</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Matemática</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Ciencia y Tecnología</li>
-</ul>
-<li>Banco de Prompts Maestros – Educación Inicial (180)</li>
-<ul class="ml-6">
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Unidades Didácticas</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Sesiones de Clase</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Evaluaciones</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Estrategias y Presentaciones</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Rúbricas</li>
-    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full bg-white"></span>Otras Actividades</li>
-</ul>
-</ul>
-</li>
-<li class="list-none">
-6. Nivel Primaria
-<ul class="list-disc list-inside ml-6 space-y-1">
-<li>Banco de Prompts por Áreas Curriculares (180)</li>
-<li>Banco de Prompts Maestros – Educación Primaria (180)</li>
-</ul>
-</li>
-<li class="list-none">
-7. Nivel Secundaria
-<ul class="list-disc list-inside ml-6 space-y-1">
-<li>Banco de Prompts por Áreas Curriculares (200)</li>
-<li>Banco de Prompts Maestros – Educación Secundaria (180)</li>
-</ul>
-</li>
-<li class="list-none">
-8. Nivel Básica Alternativa
-<ul class="list-disc list-inside ml-6 space-y-1">
-<li>Banco de Prompts por Áreas Curriculares (200)</li>
-<li>Banco de Prompts Maestros – Educación Básica Alternativa (180)</li>
-</ul>
-</li>
-<li class="list-none">Conclusión</li>
-</ul>
+            <!-- Libros relacionados -->
+            <div class="related-section">
+                <h3 class="related-title">
+                    <i class="fas fa-book-open title-icon"></i>
+                    Libros Relacionados
+                </h3>
+                 <div class="text-center py-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-[#272b30]/30 mx-auto mb-4"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <p class="text-[#272b30]/60">Próximamente más libros de la colección</p>
+                </div>
+            </div>
         </div>
     </section>
 @endsection

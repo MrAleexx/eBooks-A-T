@@ -12,11 +12,13 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         {{-- Styles - Scripts --}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="//unpkg.com/alpinejs" defer></script>
     </head>
     <body>
         <header>
-            @include('layouts.includes.top-bar')
+            {{-- @include('layouts.includes.top-bar') --}}
 
             @include('layouts.includes.navegacion')
         </header>
@@ -25,7 +27,7 @@
             @yield('contenido')
         </main>
 
-        <footer class="bg-[#222222] mt-10">
+        <footer class="bg-[#222222]">
             @include('layouts.includes.footer')
         </footer>
 

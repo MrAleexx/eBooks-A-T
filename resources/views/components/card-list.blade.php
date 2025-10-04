@@ -6,5 +6,5 @@
             class="text-sm font-medium border-b border-gray-800 text-gray-800 hover:text-orange-400 hover:border-orange-400 transition-colors duration-300">Descubrir
             Ahora</a>
     </div>
-    <img src="https://isbn.bnp.gob.pe/files/titulos/160765.jpg" alt="imagen libro" class="h-30">
+    <img src="https://isbn.bnp.gob.pe/files/titulos/160765.jpg" alt="libro" class="h-30">
 </div>

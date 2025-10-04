@@ -1,3 +1,4 @@
+
 ### Guía de Instalación del Proyecto
 
 Sigue estos pasos para poner en marcha el proyecto en tu máquina local.
@@ -25,7 +26,23 @@ Navega al directorio del proyecto:
 cd eBooks-A-T
 ```
 
-#### 3\. Configuración del Entorno
+#### 3\. Instalar Dependencias
+
+**Instalar dependencias de PHP (vendor):**
+Usa Composer para instalar todas las librerías de PHP listadas en `composer.json`.
+
+```bash
+composer install
+```
+
+**Instalar dependencias de JavaScript (node\_modules):**
+Usa npm para instalar los paquetes de Node.js.
+
+```bash
+npm install
+```
+
+#### 4\. Configuración del Entorno
 
 **Copia el archivo de entorno:**
 Crea el archivo `.env` a partir del archivo de ejemplo.
@@ -42,22 +59,6 @@ php artisan key:generate
 ```
 
 Asegúrate de configurar la conexión a tu base de datos en el archivo `.env`.
-
-#### 4\. Instalar Dependencias
-
-**Instalar dependencias de PHP (vendor):**
-Usa Composer para instalar todas las librerías de PHP listadas en `composer.json`.
-
-```bash
-composer install
-```
-
-**Instalar dependencias de JavaScript (node\_modules):**
-Usa npm para instalar los paquetes de Node.js.
-
-```bash
-npm install
-```
 
 #### 5\. Compilar los Assets
 

@@ -1,57 +1,45 @@
 @extends('layouts.app')
 
-@section('titulo', 'Finalizar Compra')
+@section('titulo', 'Transferencia Bancaria')
 
 @section('contenido')
     <section class="my-10 container mx-auto px-3">
-        <h2 class="text-2xl font-bold mb-6 text-center">Finalizar Compra</h2>
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-[#04050E] mb-2">Transferencia Bancaria</h2>
+            <p class="text-[#272b30]/60">Realiza tu transferencia a nuestra cuenta BCP</p>
+        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-xl font-semibold mb-4">Resumen de tu pedido</h3>
-
-                @foreach ($cart as $item)
-                    <div class="flex justify-between items-center border-b py-3">
-                        <div class="flex items-center">
-                            <x-book-image :image="$item['image']" :title="$item['title']" class="h-30 object-cover rounded" />
-                            <div class="ml-3">
-                                <h4 class="font-medium">{{ $item['title'] }}</h4>
-                                <p class="text-sm text-gray-600">Cantidad: {{ $item['quantity'] }}</p>
-                            </div>
-                        </div>
-                        <span class="text-orange-600 font-bold">S/
-                            {{ number_format($item['price'] * $item['quantity'], 2) }}</span>
-                    </div>
-                @endforeach
-
-                <div class="flex justify-between items-center mt-4 pt-4">
-                    <span class="text-lg font-semibold">Total:</span>
-                    <span class="text-orange-600 font-bold text-xl">S/ {{ number_format($total, 2) }}</span>
-                </div>
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Resumen del carrito -->
+            <div class="lg:w-1/2">
+                <x-cart-summary :cart="$cart" :total="$total" />
             </div>
 
-            <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-xl font-semibold mb-4">Método de Pago</h3>
-
-                <form action="{{ route('cart.process') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="radio" name="payment_method" value="bank_transfer" class="mr-2 hidden" checked>
-                    <p class="mb-2">BCP: <strong class="text-blue-900">25593579417098</strong></p>
-                    <p class="mb-2">CCI: <strong class="text-blue-900">00225519357941709881</strong></p>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Subir comprobante de pago:</label>
-                        <input type="file" name="voucher" accept="image/*" class="w-full border rounded-md p-2" required>
-                        <p class="text-sm text-gray-600 mt-1">Formatos aceptados: JPEG, PNG, JPG, GIF (Max: 2MB)</p>
-                        @error('voucher')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <button type="submit"
-                        class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded font-semibold">
-                        Confirmar Pedido
-                    </button>
-                </form>
+            <!-- Formulario de pago -->
+            <div class="lg:w-1/2">
+                <x-payment-form method="bank_transfer" methodName="Transferencia Bancaria"
+                    accountInfo='
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span>Banco:</span>
+                                <strong>BCP</strong>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>N° de Cuenta:</span>
+                                <strong class="text-lg">25593579417098</strong>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>CCI:</span>
+                                <strong>00225519357941709881</strong>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Titular:</span>
+                                <strong>GRUPO A&T</strong>
+                            </div>
+                        </div>
+                    '
+                    :action="route('cart.process')" buttonText="Confirmar Transferencia" />
             </div>
         </div>
     </section>

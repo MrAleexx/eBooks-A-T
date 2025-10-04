@@ -6,12 +6,12 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RecoverPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\ClaimsBookController;
-use App\Http\Controllers\HomeAboutController;
-use App\Http\Controllers\HomeBookController;
-use App\Http\Controllers\HomeContactController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\InformationBookController;
+use App\Http\Controllers\Home\HomeAboutController;
+use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Home\HomeBookController;
+use App\Http\Controllers\Home\HomeContactController;
+use App\Http\Controllers\Home\InformationBookController;
+use App\Http\Controllers\Home\ClaimsBookController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\User\BookController as UserBookController;
 use App\Http\Controllers\User\PerfilController;
@@ -21,12 +21,19 @@ use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ClaimsController;
+use App\Policies\PrivacyPolicies;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 // RUTAS PUBLICAS
 Route::get('/', HomeController::class)->name('bookmart');
 Route::get('/nuestros-libros', HomeBookController::class)->name('homebook');
 Route::get('/sobre-nosotros', HomeAboutController::class)->name('homeabout');
+
+Route::get('/politicas-privacidad', [PrivacyPolicies::class, 'policies'])->name('privacy_policies');
+Route::get('/politicas-de-cookie', [PrivacyPolicies::class, 'cookie'])->name('cookie');
+Route::get('/terminos-condiciones', [PrivacyPolicies::class, 'condicion'])->name('condicion');
+Route::get('/terminos-condiciones-promocionales', [PrivacyPolicies::class, 'promocional'])->name('promocional');
 
 Route::get('/contactanos', [HomeContactController::class, 'index'])->name('homecontact');
 Route::post('/contactanos', [HomeContactController::class, 'store'])->name('homecontact.store');
@@ -62,6 +69,7 @@ Route::middleware('auth')->prefix('bookmart')->group(function () {
     Route::get('/perfil/mis-libros/{book}', [UserBookController::class, 'show'])->name('user.books.show');
 
     Route::get('/perfil/mis-libros/{book}/download', [UserBookController::class, 'downloadPdf'])->name('user.books.download');
+    Route::get('/perfil/mis-libros/{book}/view', [UserBookController::class, 'viewPdf'])->name('user.books.view');
 
     // RUTAS CARRITO DE COMPRAS
     Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
@@ -74,6 +82,7 @@ Route::middleware('auth')->prefix('bookmart')->group(function () {
     Route::get('/carrito/checkout/cuenta-bancaria', [CartController::class, 'bank'])->name('cart.bank');
     Route::get('/carrito/checkout/correo', [CartController::class, 'correo'])->name('cart.correo');
     Route::post('/carrito/checkout/correo-enviar', [CartController::class, 'enviarCorreo'])->name('cart.enviarCorreo');
+
 
     Route::post('/carrito/procesar-pedido', [CartController::class, 'processCheckout'])->name('cart.process');
 
@@ -96,8 +105,24 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Gestión de órdenes
     Route::resource('orders', AdminOrderController::class);
+
     Route::post('orders/{order}/update-payment-status', [AdminOrderController::class, 'updatePaymentStatus'])
         ->name('orders.updatePaymentStatus');
+
+    Route::get('orders/{order}/invoice', [AdminOrderController::class, 'generateInvoice'])
+        ->name('orders.generateInvoice');
+
+    Route::get('orders/{order}/download-invoice-pdf', [AdminOrderController::class, 'downloadInvoicePdf'])
+        ->name('orders.downloadInvoicePdf');
+
+    Route::post('orders/{order}/send-invoice-email', [AdminOrderController::class, 'sendInvoiceEmail'])
+        ->name('orders.sendInvoiceEmail');
+
+    Route::put('orders/{order}/upload-internal-voucher', [AdminOrderController::class, 'uploadInternalVoucher'])
+        ->name('orders.uploadInternalVoucher');
+
+    Route::delete('orders/{order}/delete-internal-voucher', [AdminOrderController::class, 'deleteInternalVoucher'])
+        ->name('orders.deleteInternalVoucher');
 
     // Gestión de reclamos
     Route::get('/claims', [ClaimsController::class, 'index'])->name('claims.index');
@@ -110,5 +135,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     })->name('index');
+});
 
+// En routes/web.php (temporalmente)
+Route::get('/debug-storage', function () {
+    $testFile = 'vouchers/test.jpg';
+
+    // Verificar rutas
+    echo "Storage path: " . storage_path('app/public/' . $testFile) . "<br>";
+    echo "Public path: " . public_path('storage/' . $testFile) . "<br>";
+    echo "Storage URL: " . Storage::url($testFile) . "<br>";
+
+    // Verificar si el symlink existe
+    echo "Symlink exists: " . (is_link(public_path('storage')) ? 'YES' : 'NO') . "<br>";
+    if (is_link(public_path('storage'))) {
+        echo "Symlink target: " . readlink(public_path('storage')) . "<br>";
+    }
 });

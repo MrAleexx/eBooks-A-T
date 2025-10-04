@@ -52,7 +52,7 @@ class UserPolicy
         if ($user->id === $model->id) {
             return false;
         }
-        
+
         // Solo admin puede eliminar usuarios
         return $user->isAdmin();
     }
@@ -74,7 +74,7 @@ class UserPolicy
         if ($user->id === $model->id) {
             return false;
         }
-        
+
         return $user->isAdmin();
     }
 
@@ -87,7 +87,7 @@ class UserPolicy
         if ($user->id === $model->id) {
             return false;
         }
-        
+
         return $user->isAdmin();
     }
 
@@ -110,7 +110,7 @@ class UserPolicy
         if ($user->id === $model->id) {
             return false;
         }
-        
+
         return $user->isAdmin();
     }
 

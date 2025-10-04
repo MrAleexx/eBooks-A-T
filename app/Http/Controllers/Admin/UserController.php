@@ -63,17 +63,19 @@ class UserController extends Controller
             ->with('success', 'Usuario actualizado exitosamente.');
     }
 
+        
     public function destroy(User $user)
     {
         // ✅ Verificar si puede eliminar este usuario
         $this->authorize('delete', $user);
         
-        /** @var \App\Models\User $user */
+            // Prevenir que un usuario se elimine a sí mismo
         if ($user->id === auth()->id()) {
             return redirect()->route('admin.users.index')
                 ->with('error', 'No puedes eliminar tu propia cuenta.');
         }
 
+        // Eliminar órdenes y detalles relacionados antes de eliminar el usuario
         $user->orders()->each(function($order) {
             $order->orderDetails()->delete();
             $order->payment()->delete();

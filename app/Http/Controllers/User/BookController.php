@@ -59,4 +59,32 @@ class BookController extends Controller
 
         return response()->download($filePath, $book->title . '.pdf');
     }
+
+
+    public function viewPdf(Book $book)
+    {
+        $hasPurchased = OrderDetail::whereHas('order', function ($query) {
+            $query->where('user_id', Auth::id())
+                ->where('status', 'paid');
+        })->where('book_id', $book->id)->exists();
+
+        if (!$hasPurchased) {
+            abort(403, 'No tienes acceso a este libro');
+        }
+
+        if (!$book->pdf_file) {
+            abort(404, 'El archivo PDF no está disponible');
+        }
+
+        $filePath = public_path('storage/' . $book->pdf_file);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'El archivo no se encuentra en el servidor');
+        }
+
+        return response()->file($filePath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $book->title . '.pdf"'
+        ]);
+    }
 }
