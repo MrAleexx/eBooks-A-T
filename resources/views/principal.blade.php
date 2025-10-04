@@ -364,50 +364,7 @@
         </div>
     </section>
 
-    <!-- Stats Section Mejorada -->
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div
-                    class="text-center p-6 rounded-xl bg-gradient-to-br from-gray-50 to-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div
-                        class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#052f5a]/10 text-[#052f5a] mb-4">
-                        <i class="fas fa-book text-2xl"></i>
-                    </div>
-                    <div class="text-4xl font-bold text-[#052f5a] mb-2" id="booksCount">0</div>
-                    <p class="text-gray-600 font-medium">Libros Disponibles</p>
-                </div>
-                <div
-                    class="text-center p-6 rounded-xl bg-gradient-to-br from-gray-50 to-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div
-                        class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#ea9216]/10 text-[#ea9216] mb-4">
-                        <i class="fas fa-tags text-2xl"></i>
-                    </div>
-                    <div class="text-4xl font-bold text-[#052f5a] mb-2" id="categoriesCount">0</div>
-                    <p class="text-gray-600 font-medium">Categorías</p>
-                </div>
-                <div
-                    class="text-center p-6 rounded-xl bg-gradient-to-br from-gray-50 to-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div
-                        class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#04050E]/10 text-[#04050E] mb-4">
-                        <i class="fas fa-users text-2xl"></i>
-                    </div>
-                    <div class="text-4xl font-bold text-[#052f5a] mb-2" id="clientsCount">0</div>
-                    <p class="text-gray-600 font-medium">Clientes Satisfechos</p>
-                </div>
-                <div
-                    class="text-center p-6 rounded-xl bg-gradient-to-br from-gray-50 to-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div
-                        class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#272b30]/10 text-[#272b30] mb-4">
-                        <i class="fas fa-award text-2xl"></i>
-                    </div>
-                    <div class="text-4xl font-bold text-[#052f5a] mb-2" id="experienceCount">0</div>
-                    <p class="text-gray-600 font-medium">Años de Experiencia</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    
     <!-- Libro Destacado Section -->
     <section class="py-16 bg-white">
         <div class="container mx-auto px-4">
