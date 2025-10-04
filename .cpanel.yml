@@ -2,4 +2,10 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/userdtemp/public_html/
-    - /bin/rsync -av public/ $DEPLOYPATH
+    - /bin/rsync -av --delete public/ $DEPLOYPATH
+    # Copiar composer files al directorio padre de public_html
+    - /bin/cp composer.json /home/userdtemp/
+    - /bin/cp composer.lock /home/userdtemp/
+    # Instalar dependencias en el directorio correcto
+    - cd /home/userdtemp/ && composer install --no-dev --optimize-autoloader
+    - echo "Deployment with Composer dependencies completed"
