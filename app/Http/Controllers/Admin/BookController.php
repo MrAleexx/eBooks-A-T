@@ -32,6 +32,11 @@ class BookController extends Controller
         // Procesar checkboxes
         $validated = $this->processCheckboxes($request, $validated);
 
+        // ✅ LÓGICA PARA PRECIO GRATUITO
+        if ($validated['is_free']) {
+            $validated['price'] = 0;
+        }
+
         \Log::info('📝 DATOS VALIDADOS PARA CREAR:', $validated);
 
         try {
@@ -44,6 +49,8 @@ class BookController extends Controller
             \Log::info('✅ LIBRO CREADO EXITOSAMENTE', [
                 'id' => $book->id,
                 'title' => $book->title,
+                'is_free' => $book->is_free,
+                'price' => $book->price,
                 'contributors_count' => $book->contributors()->count()
             ]);
 
@@ -84,14 +91,23 @@ class BookController extends Controller
         // Procesar checkboxes
         $validated = $this->processCheckboxes($request, $validated);
 
+        // ✅ LÓGICA PARA PRECIO GRATUITO
+        if ($validated['is_free']) {
+            $validated['price'] = 0;
+        }
+
         \Log::info('📝 DATOS VALIDADOS PARA ACTUALIZAR:', $validated);
 
         try {
             // Actualizar libro
             $book->update($validated);
 
+            \Log::info('✅ LIBRO ACTUALIZADO EXITOSAMENTE', [
+                'book_id' => $book->id,
+                'is_free' => $book->is_free,
+                'price' => $book->price
+            ]);
 
-            
             return redirect()->route('admin.books.index')
                 ->with('success', 'Libro actualizado exitosamente.');
         } catch (\Exception $e) {
@@ -175,6 +191,7 @@ class BookController extends Controller
             'active' => 'boolean',
             'downloadable' => 'boolean',
             'pre_order' => 'boolean',
+            'is_free' => 'boolean', // ✅ AGREGADO
             'published_at' => 'nullable|date',
         ]);
     }
@@ -214,6 +231,7 @@ class BookController extends Controller
         $validated['active'] = $request->boolean('active');
         $validated['downloadable'] = $request->boolean('downloadable');
         $validated['pre_order'] = $request->boolean('pre_order');
+        $validated['is_free'] = $request->boolean('is_free'); // ✅ AGREGADO
 
         return $validated;
     }

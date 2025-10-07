@@ -5,16 +5,34 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// Determine if the application is in maintenance mode...
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
-    require $maintenance;
+// DETECTAR AMBIENTE - PRODUCCIÓN vs LOCAL
+if (file_exists(__DIR__ . '/../../repositories/eBooks-A-T/storage/framework/maintenance.php')) {
+    // PRODUCCIÓN: /home/userdtemp/repositories/eBooks-A-T/storage/
+    require __DIR__ . '/../../repositories/eBooks-A-T/storage/framework/maintenance.php';
+} elseif (file_exists(__DIR__ . '/../storage/framework/maintenance.php')) {
+    // LOCAL: /tu-proyecto/public/../storage/
+    require __DIR__ . '/../storage/framework/maintenance.php';
 }
 
-// Register the Composer autoloader...
-require __DIR__.'/../vendor/autoload.php';
+// AUTOLOADER
+if (file_exists(__DIR__ . '/../../repositories/eBooks-A-T/vendor/autoload.php')) {
+    // PRODUCCIÓN
+    require __DIR__ . '/../../repositories/eBooks-A-T/vendor/autoload.php';
+} elseif (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    // LOCAL
+    require __DIR__ . '/../vendor/autoload.php';
+}
 
-// Bootstrap Laravel and handle the request...
+// BOOTSTRAP LARAVEL
 /** @var Application $app */
-$app = require_once __DIR__.'/../bootstrap/app.php';
+if (file_exists(__DIR__ . '/../../repositories/eBooks-A-T/bootstrap/app.php')) {
+    // PRODUCCIÓN
+    $app = require_once __DIR__ . '/../../repositories/eBooks-A-T/bootstrap/app.php';
+} elseif (file_exists(__DIR__ . '/../bootstrap/app.php')) {
+    // LOCAL  
+    $app = require_once __DIR__ . '/../bootstrap/app.php';
+} else {
+    die('Error: Laravel bootstrap files not found');
+}
 
 $app->handleRequest(Request::capture());

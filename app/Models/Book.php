@@ -37,6 +37,7 @@ class Book extends Model
 
         // Información Comercial
         'price',
+        'is_free',
         'reading_age',
         'publication_url',
 
@@ -56,6 +57,7 @@ class Book extends Model
         'publication' => 'date',
         'published_at' => 'datetime',
         'price' => 'decimal:2',
+        'is_free' => 'boolean',
         'pages' => 'integer',
         'is_new' => 'boolean',
         'active' => 'boolean',
@@ -138,5 +140,17 @@ class Book extends Model
     public function scopeDownloadable($query)
     {
         return $query->where('downloadable', true);
+    }
+
+    // Scope para libros gratuitos
+    public function scopeFree($query)
+    {
+        return $query->where('is_free', true);
+    }
+
+    // Scope para libros pagados
+    public function scopePaid($query)
+    {
+        return $query->where('is_free', false);
     }
 }

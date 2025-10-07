@@ -148,7 +148,7 @@ class OrderController extends Controller
 
             \Log::info('Data prepared for Greenter');
 
-            // ✅ SOLUCIÓN: VERIFICAR SI ESTAMOS EN MODO DESARROLLO SIN CERTIFICADO
+            // VERIFICAR SI ESTAMOS EN MODO DESARROLLO SIN CERTIFICADO
             $certPath = config('greenter.fe.cert', '');
             $isDemoMode = empty($certPath) || !file_exists($certPath);
 
@@ -162,7 +162,7 @@ class OrderController extends Controller
                     ->with('demo_mode', true);
             }
 
-            // ✅ MODO PRODUCCIÓN: Usar Greenter real
+            // Usar Greenter real
             try {
                 $response = Greenter::send('invoice', $data);
 

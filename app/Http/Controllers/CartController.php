@@ -16,6 +16,7 @@ class CartController extends Controller
         private OrderService $orderService
     ) {}
 
+    // ✅ AGREGAR ESTE MÉTODO QUE FALTA
     public function index()
     {
         return view('cart.index', [
@@ -24,9 +25,27 @@ class CartController extends Controller
         ]);
     }
 
-    /**
-     * Agregar libro al carrito
-     */
+    // ✅ AGREGAR ESTOS MÉTODOS QUE TAMBIÉN FALTAN
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1|max:5'
+        ]);
+
+        $this->cartService->updateQuantity($id, $request->quantity);
+
+        return redirect()->route('cart.index')->with('success', 'Cantidad actualizada');
+    }
+
+    public function remove($id)
+    {
+        if ($itemTitle = $this->cartService->removeItem($id)) {
+            return redirect()->route('cart.index')->with('success', "{$itemTitle} eliminado del carrito");
+        }
+
+        return redirect()->route('cart.index')->with('error', 'Item no encontrado en el carrito');
+    }
+
     public function add(Request $request, $book)
     {
         $request->validate([
@@ -41,30 +60,14 @@ class CartController extends Controller
             'author' => $bookModel->author,
             'price' => $bookModel->price,
             'image' => $bookModel->image,
+            'is_free' => $bookModel->is_free // ✅ AGREGAR ESTA LÍNEA
         ], $request->quantity);
 
-        return redirect()->back()->with('success', 'Libro añadido al carrito');
-    }
+        $message = $bookModel->is_free
+            ? 'Libro gratuito añadido al carrito'
+            : 'Libro añadido al carrito';
 
-    /**
-     * Actualizar cantidad (para Livewire)
-     */
-    public function update(Request $request, $id)
-    {
-        // Este método probablemente lo maneje Livewire
-        return redirect()->back();
-    }
-
-    /**
-     * Eliminar item del carrito
-     */
-    public function remove($id)
-    {
-        if ($itemTitle = $this->cartService->removeItem($id)) {
-            return redirect()->back()->with('success', "{$itemTitle} eliminado del carrito");
-        }
-
-        return redirect()->back()->with('error', 'Item no encontrado en el carrito');
+        return redirect()->back()->with('success', $message);
     }
 
     public function checkout()
@@ -73,10 +76,44 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
         }
 
+        // Si solo tiene libros gratuitos, procesar directamente
+        if ($this->cartService->isCartFreeOnly()) {
+            return $this->processFreeOrder();
+        }
+
         return view('cart.checkout', [
             'cart' => $this->cartService->getCart(),
-            'total' => $this->cartService->getTotal()
+            'total' => $this->cartService->getTotal(),
+            'hasFreeBooks' => $this->cartService->hasFreeBooks(),
+            'freeBooks' => $this->cartService->getFreeBooks(),
+            'paidBooks' => $this->cartService->getPaidBooks()
         ]);
+    }
+
+    private function processFreeOrder()
+    {
+        try {
+            $cart = $this->cartService->getCart();
+
+            // Crear orden gratuita
+            $order = $this->orderService->createOrder($cart, 'free');
+
+            // Enviar email de confirmación
+            try {
+                Mail::to(auth()->user()->email)
+                    ->send(new PedidoConfirmado($cart, auth()->user(), null, 0));
+            } catch (\Exception $emailException) {
+                \Log::error('Error al enviar email para orden gratuita: ' . $emailException->getMessage());
+            }
+
+            $this->cartService->clearCart();
+
+            return redirect()->route('orders.show', $order->id)
+                ->with('success', '¡Libros gratuitos adquiridos exitosamente! Ya puedes acceder a ellos.');
+        } catch (\Exception $e) {
+            \Log::error('ERROR en processFreeOrder: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error al procesar los libros gratuitos.');
+        }
     }
 
     public function processCheckout(CheckoutRequest $request)
@@ -85,8 +122,15 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío');
         }
 
+        // Validar que si hay libros pagados, se suba voucher
+        $hasPaidBooks = $this->cartService->hasPaidBooks();
+
+        if ($hasPaidBooks && !$request->hasFile('voucher')) {
+            return redirect()->back()->with('error', 'Para libros pagados, debes subir un comprobante.');
+        }
+
         $cart = $this->cartService->getCart();
-        $voucherPath = $request->file('voucher')->store('vouchers', 'public');
+        $voucherPath = $hasPaidBooks ? $request->file('voucher')->store('vouchers', 'public') : null;
 
         $order = $this->orderService->createOrder(
             $cart,
@@ -96,8 +140,11 @@ class CartController extends Controller
 
         $this->cartService->clearCart();
 
-        return redirect()->route('orders.show', $order->id)
-            ->with('success', '¡Pedido realizado con éxito! Espera la confirmación de tu pago.');
+        $message = $hasPaidBooks
+            ? '¡Pedido realizado con éxito! Espera la confirmación de tu pago.'
+            : '¡Libros gratuitos adquiridos exitosamente! Ya puedes acceder a ellos.';
+
+        return redirect()->route('orders.show', $order->id)->with('success', $message);
     }
 
     public function enviarCorreo(CheckoutRequest $request)

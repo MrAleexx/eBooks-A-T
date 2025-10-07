@@ -1,3 +1,4 @@
+{{-- resources/views/components/book-image.blade.php --}}
 @props(['image', 'title', 'class' => '', 'defaultClass' => 'w-full object-cover'])
 
 @php
