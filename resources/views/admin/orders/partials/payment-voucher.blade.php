@@ -12,7 +12,7 @@
             Comprobante del Cliente
         </h4>
 
-        @if ($order->payment && $order->payment->voucher_image)
+        @if ($order->payment && $order->payment->voucher_url)
             <div class="border border-blue-200 rounded-lg p-4 bg-blue-50">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center">
@@ -25,7 +25,7 @@
                             </p>
                         </div>
                     </div>
-                    <a href="{{ asset('storage/' . $order->payment->voucher_image) }}" target="_blank"
+                    <a href="{{ $order->payment->voucher_url }}" target="_blank"
                         class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 transition-colors duration-200 flex items-center">
                         <i class="fas fa-eye mr-1"></i>
                         Ver

@@ -1,3 +1,4 @@
+{{-- resource/views/livewire/cart-index.blade.php --}}
 <div>
     <!-- Notificaciones -->
     <div x-data="{
@@ -66,58 +67,83 @@
 
                                 <!-- Información del producto -->
                                 <div class="flex-1 min-w-0">
+                                    <!-- Badge para libros gratuitos -->
+                                    @if (isset($item['is_free']) && $item['is_free'])
+                                        <div
+                                            class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">
+                                            GRATUITO
+                                        </div>
+                                    @endif
+
                                     <h3 class="font-semibold text-[#04050E] text-lg mb-2">{{ $item['title'] }}</h3>
                                     <p class="text-[#272b30]/80 text-sm mb-3">{{ $item['author'] }}</p>
 
                                     <!-- Precio unitario -->
                                     <div class="flex items-center gap-2 mb-3">
                                         <span class="text-[#272b30]/60 text-sm">Precio unitario:</span>
-                                        <span class="text-[#ea9216] font-bold">S/
-                                            {{ number_format($item['price'], 2) }}</span>
+                                        @if (isset($item['is_free']) && $item['is_free'])
+                                            <span class="text-green-600 font-bold">GRATIS</span>
+                                        @else
+                                            <span class="text-[#ea9216] font-bold">S/
+                                                {{ number_format($item['price'], 2) }}</span>
+                                        @endif
                                     </div>
 
                                     <!-- Cantidad -->
                                     <div class="flex items-center gap-4 mb-4">
                                         <span class="text-[#272b30]/60 text-sm">Cantidad:</span>
                                         <div class="flex items-center space-x-2">
-                                            <!-- Botones para móvil -->
-                                            <div class="flex items-center space-x-2">
-                                                <button wire:click="decrement('{{ $item['id'] }}')"
-                                                    wire:loading.attr="disabled"
-                                                    class="w-8 h-8 rounded-full bg-[#272b30]/10 hover:bg-[#ea9216] text-[#04050E] flex items-center justify-center transition-colors disabled:opacity-50"
-                                                    {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M20 12H4" />
-                                                    </svg>
-                                                </button>
+                                            @if (isset($item['is_free']) && $item['is_free'])
+                                                <!-- Para libros gratuitos, mostrar cantidad fija -->
+                                                <span
+                                                    class="w-16 text-center border border-[#272b30]/20 rounded-lg py-1 px-2 bg-gray-50">
+                                                    1
+                                                </span>
+                                                <span class="text-xs text-gray-500">(Solo 1 por pedido)</span>
+                                            @else
+                                                <!-- Botones para libros pagados -->
+                                                <div class="flex items-center space-x-2">
+                                                    <button wire:click="decrement('{{ $item['id'] }}')"
+                                                        wire:loading.attr="disabled"
+                                                        class="w-8 h-8 rounded-full bg-[#272b30]/10 hover:bg-[#ea9216] text-[#04050E] flex items-center justify-center transition-colors disabled:opacity-50"
+                                                        {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M20 12H4" />
+                                                        </svg>
+                                                    </button>
 
-                                                <input type="number" value="{{ $item['quantity'] }}"
-                                                    wire:change="updateQuantity('{{ $item['id'] }}', $event.target.value)"
-                                                    min="1" max="5"
-                                                    class="w-16 text-center border border-[#272b30]/20 rounded-lg py-1 px-2 focus:border-[#ea9216] focus:ring-2 focus:ring-[#ea9216]/20">
+                                                    <input type="number" value="{{ $item['quantity'] }}"
+                                                        wire:change="updateQuantity('{{ $item['id'] }}', $event.target.value)"
+                                                        min="1" max="5"
+                                                        class="w-16 text-center border border-[#272b30]/20 rounded-lg py-1 px-2 focus:border-[#ea9216] focus:ring-2 focus:ring-[#ea9216]/20">
 
-                                                <button wire:click="increment('{{ $item['id'] }}')"
-                                                    wire:loading.attr="disabled"
-                                                    class="w-8 h-8 rounded-full bg-[#272b30]/10 hover:bg-[#ea9216] text-[#04050E] flex items-center justify-center transition-colors disabled:opacity-50"
-                                                    {{ $item['quantity'] >= 5 ? 'disabled' : '' }}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M12 4v16m8-8H4" />
-                                                    </svg>
-                                                </button>
-                                            </div>
+                                                    <button wire:click="increment('{{ $item['id'] }}')"
+                                                        wire:loading.attr="disabled"
+                                                        class="w-8 h-8 rounded-full bg-[#272b30]/10 hover:bg-[#ea9216] text-[#04050E] flex items-center justify-center transition-colors disabled:opacity-50"
+                                                        {{ $item['quantity'] >= 5 ? 'disabled' : '' }}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M12 4v16m8-8H4" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
 
                                     <!-- Subtotal -->
                                     <div class="flex items-center gap-2 mb-4">
                                         <span class="text-[#272b30]/60 text-sm">Subtotal:</span>
-                                        <span class="text-[#ea9216] font-bold text-lg">
-                                            S/ {{ number_format($item['price'] * $item['quantity'], 2) }}
-                                        </span>
+                                        @if (isset($item['is_free']) && $item['is_free'])
+                                            <span class="text-green-600 font-bold text-lg">GRATIS</span>
+                                        @else
+                                            <span class="text-[#ea9216] font-bold text-lg">
+                                                S/ {{ number_format($item['price'] * $item['quantity'], 2) }}
+                                            </span>
+                                        @endif
                                     </div>
 
                                     <!-- Acciones -->
@@ -175,8 +201,31 @@
                                 <span class="text-[#04050E] font-semibold">S/ {{ number_format($total, 2) }}</span>
                             </div>
 
+                            <!-- Mostrar libros gratuitos si existen -->
+                            @php
+                                $freeBooksCount = count(
+                                    array_filter($cart, function ($item) {
+                                        return isset($item['is_free']) && $item['is_free'];
+                                    }),
+                                );
+                            @endphp
+
+                            @if ($freeBooksCount > 0)
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                    <div class="flex items-center gap-2 text-green-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span class="text-sm font-medium">Incluye {{ $freeBooksCount }} libro(s)
+                                            gratuito(s)</span>
+                                    </div>
+                                </div>
+                            @endif
+
                             <!-- Nota sobre exoneración de IGV -->
-                            <div class="bg-[#052f5a]/5 border border-[#052f5a]/10 rounded-lg p-3 mt-4">
+                            <div class="bg-[#052f5a]/5 border border-[#052f5a]/10 rounded-lg p-3">
                                 <div class="flex items-start gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="h-4 w-4 text-[#052f5a] mt-0.5 flex-shrink-0" fill="none"
@@ -200,13 +249,21 @@
                         <!-- Botón finalizar compra -->
                         <a href="{{ route('cart.checkout') }}"
                             class="w-full bg-gradient-to-r from-[#052f5a] to-[#041f3f] hover:from-[#041f3f] hover:to-[#052f5a] text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl text-center block">
-                            FINALIZAR COMPRA
+                            @if ($total == 0 && $freeBooksCount > 0)
+                                OBTENER LIBROS GRATIS
+                            @else
+                                FINALIZAR COMPRA
+                            @endif
                         </a>
 
                         <!-- Información adicional -->
                         <div class="mt-4 text-center">
                             <p class="text-[#272b30]/60 text-xs">
-                                * El envío se calculará en el proceso de checkout
+                                @if ($total == 0 && $freeBooksCount > 0)
+                                    * Los libros gratuitos estarán disponibles inmediatamente
+                                @else
+                                    * El envío se calculará en el proceso de checkout
+                                @endif
                             </p>
                         </div>
                     </div>

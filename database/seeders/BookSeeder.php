@@ -28,6 +28,7 @@ class BookSeeder extends Seeder
             'publication_url' => 'https://a.co/d/6PzR4rD',
             'edition' => '1er',
             'price' => 10.00,
+            'is_free' => false,
             'image' => 'https://isbn.bnp.gob.pe/files/titulos/160765.jpg',
             'pdf_file' => 'books/pdfs/prE3o0Es4eSL2YhBsIS5snTk9e3PvLiLL8es3e90.pdf',
             'description' => 'La educación es un viaje que nunca se detiene. Cada día, en cada aula, los docentes tienen en sus manos la oportunidad de sembrar curiosidad, encender la imaginación y acompañar a sus estudiantes en la construcción de sus sueños. Sin embargo, también sabemos que enseñar no siempre es fácil: requiere creatividad, tiempo, recursos y, sobre todo, mucha pasión.

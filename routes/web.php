@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\ClaimsController;
 use App\Policies\PrivacyPolicies;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 
 // RUTAS PUBLICAS
 Route::get('/', HomeController::class)->name('bookmart');
@@ -150,5 +151,25 @@ Route::get('/debug-storage', function () {
     echo "Symlink exists: " . (is_link(public_path('storage')) ? 'YES' : 'NO') . "<br>";
     if (is_link(public_path('storage'))) {
         echo "Symlink target: " . readlink(public_path('storage')) . "<br>";
+    }
+});
+
+
+Route::get('/clear', function () {
+    try {
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('view:clear');
+        Artisan::call('config:cache');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Clear aplicado correctamente'
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
     }
 });

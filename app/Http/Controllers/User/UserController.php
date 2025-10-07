@@ -25,7 +25,7 @@ class UserController extends Controller
             'email'     => ['nullable', 'email', 'unique:users,email,' . $user->id],
         ]);
 
-        $data = array_filter($data, fn ($value) => !is_null($value));
+        $data = array_filter($data, fn($value) => !is_null($value));
 
         $user->update($data);
 

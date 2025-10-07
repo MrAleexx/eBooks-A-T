@@ -152,6 +152,7 @@ class BookController extends Controller
             'active' => 'boolean',
             'downloadable' => 'boolean',
             'pre_order' => 'boolean',
+            'is_free' => 'boolean', 
             'published_at' => 'nullable|date',
         ]);
     }

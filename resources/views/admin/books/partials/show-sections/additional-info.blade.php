@@ -1,3 +1,4 @@
+{{-- resource/views/admin/books/partials/show-sections/additional-info.blade.php --}}
 <div class="space-y-4">
     <!-- Identificadores Adicionales -->
     @if ($book->isbn13 || $book->deposito_legal)
@@ -76,7 +77,7 @@
     @endif
 
     <!-- Estados del Libro -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div
             class="text-center p-3 rounded-lg {{ $book->active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} flex flex-col items-center">
             <i class="fas {{ $book->active ? 'fa-check-circle' : 'fa-times-circle' }} mb-1"></i>
@@ -91,6 +92,11 @@
             class="text-center p-3 rounded-lg {{ $book->pre_order ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800' }} flex flex-col items-center">
             <i class="fas {{ $book->pre_order ? 'fa-clock' : 'fa-check' }} mb-1"></i>
             <div class="text-sm font-medium">{{ $book->pre_order ? 'Pre-orden' : 'Disponible' }}</div>
+        </div>
+        <div
+            class="text-center p-3 rounded-lg {{ $book->is_free ? 'bg-green-100 text-green-800' : 'bg-purple-100 text-purple-800' }} flex flex-col items-center">
+            <i class="fas {{ $book->is_free ? 'fa-gift' : 'fa-tag' }} mb-1"></i>
+            <div class="text-sm font-medium">{{ $book->is_free ? 'Gratuito' : 'De Pago' }}</div>
         </div>
         <div class="text-center p-3 rounded-lg bg-purple-100 text-purple-800 flex flex-col items-center">
             <i class="fas fa-file-pdf mb-1"></i>
