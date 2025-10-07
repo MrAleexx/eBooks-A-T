@@ -22,7 +22,6 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        \Log::info('🎯 INICIANDO STORE BOOK', $request->all());
 
         $validated = $this->validateBookData($request);
 
@@ -32,12 +31,10 @@ class BookController extends Controller
         // Procesar checkboxes
         $validated = $this->processCheckboxes($request, $validated);
 
-        // ✅ LÓGICA PARA PRECIO GRATUITO
+
         if ($validated['is_free']) {
             $validated['price'] = 0;
         }
-
-        \Log::info('📝 DATOS VALIDADOS PARA CREAR:', $validated);
 
         try {
             // Crear libro
@@ -46,22 +43,9 @@ class BookController extends Controller
             // Procesar contribuidores
             $this->processContributors($book, $request->input('contributors', []));
 
-            \Log::info('✅ LIBRO CREADO EXITOSAMENTE', [
-                'id' => $book->id,
-                'title' => $book->title,
-                'is_free' => $book->is_free,
-                'price' => $book->price,
-                'contributors_count' => $book->contributors()->count()
-            ]);
-
             return redirect()->route('admin.books.index')
                 ->with('success', 'Libro creado exitosamente.');
         } catch (\Exception $e) {
-            \Log::error('❌ ERROR CREANDO LIBRO:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
             return back()->with('error', 'Error al crear el libro: ' . $e->getMessage());
         }
     }
@@ -78,11 +62,6 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book)
     {
-        \Log::info('🔄 INICIANDO UPDATE BOOK', [
-            'book_id' => $book->id,
-            'request_data' => $request->all()
-        ]);
-
         $validated = $this->validateBookData($request, $book);
 
         // Procesar archivos (con eliminación de anteriores)
@@ -91,40 +70,23 @@ class BookController extends Controller
         // Procesar checkboxes
         $validated = $this->processCheckboxes($request, $validated);
 
-        // ✅ LÓGICA PARA PRECIO GRATUITO
         if ($validated['is_free']) {
             $validated['price'] = 0;
         }
-
-        \Log::info('📝 DATOS VALIDADOS PARA ACTUALIZAR:', $validated);
 
         try {
             // Actualizar libro
             $book->update($validated);
 
-            \Log::info('✅ LIBRO ACTUALIZADO EXITOSAMENTE', [
-                'book_id' => $book->id,
-                'is_free' => $book->is_free,
-                'price' => $book->price
-            ]);
-
             return redirect()->route('admin.books.index')
                 ->with('success', 'Libro actualizado exitosamente.');
         } catch (\Exception $e) {
-            \Log::error('❌ ERROR ACTUALIZANDO LIBRO:', [
-                'book_id' => $book->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
             return back()->with('error', 'Error al actualizar el libro: ' . $e->getMessage());
         }
     }
 
     public function destroy(Book $book)
     {
-        \Log::info('🗑️ ELIMINANDO LIBRO', ['id' => $book->id, 'title' => $book->title]);
-
         // Eliminar contribuidores primero (por integridad referencial)
         $book->contributors()->delete();
 
@@ -137,8 +99,6 @@ class BookController extends Controller
         }
 
         $book->delete();
-
-        \Log::info('✅ LIBRO ELIMINADO EXITOSAMENTE', ['id' => $book->id]);
 
         return redirect()->route('admin.books.index')
             ->with('success', 'Libro eliminado exitosamente.');
@@ -179,6 +139,7 @@ class BookController extends Controller
 
             // Información Comercial
             'price' => 'required|numeric|min:0',
+            'is_free' => 'boolean',
             'reading_age' => 'nullable|string|max:50',
             'publication_url' => 'nullable|url|max:500',
 
@@ -191,7 +152,7 @@ class BookController extends Controller
             'active' => 'boolean',
             'downloadable' => 'boolean',
             'pre_order' => 'boolean',
-            'is_free' => 'boolean', // ✅ AGREGADO
+            'is_free' => 'boolean', 
             'published_at' => 'nullable|date',
         ]);
     }
@@ -231,7 +192,7 @@ class BookController extends Controller
         $validated['active'] = $request->boolean('active');
         $validated['downloadable'] = $request->boolean('downloadable');
         $validated['pre_order'] = $request->boolean('pre_order');
-        $validated['is_free'] = $request->boolean('is_free'); // ✅ AGREGADO
+        $validated['is_free'] = $request->boolean('is_free');
 
         return $validated;
     }
@@ -241,11 +202,6 @@ class BookController extends Controller
      */
     private function processContributors(Book $book, array $contributors): void
     {
-        \Log::info('👥 PROCESANDO CONTRIBUIDORES', [
-            'book_id' => $book->id,
-            'contributors_count' => count($contributors)
-        ]);
-
         // Eliminar contribuidores existentes
         $book->contributors()->delete();
 
@@ -258,11 +214,6 @@ class BookController extends Controller
                     'email' => $contributorData['email'] ?? null,
                     'sequence_number' => $contributorData['sequence_number'] ?? 1,
                     'biographical_note' => $contributorData['biographical_note'] ?? null,
-                ]);
-
-                \Log::info('✅ CONTRIBUIDOR AGREGADO', [
-                    'book_id' => $book->id,
-                    'contributor_name' => $contributorData['full_name']
                 ]);
             }
         }

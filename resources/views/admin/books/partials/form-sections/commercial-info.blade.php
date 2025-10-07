@@ -37,6 +37,10 @@
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 price-field"
                     value="{{ old('price', $book->price ?? '') }}"
                     {{ old('is_free', $book->is_free ?? false) ? 'disabled' : '' }}>
+
+                <!-- Campo hidden para enviar el precio cuando esté deshabilitado -->
+                <input type="hidden" id="price_hidden" name="price" value="{{ old('price', $book->price ?? '') }}">
+
                 @error('price')
                     <p class="text-red-500 text-sm mt-1 flex items-center">
                         <i class="fas fa-exclamation-circle mr-1"></i>
@@ -112,6 +116,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const freeToggle = document.getElementById('is_free');
             const priceField = document.getElementById('price');
+            const priceHidden = document.getElementById('price_hidden');
             const freeInfo = document.getElementById('free-info');
             const freeBadge = document.getElementById('free-badge');
 
@@ -120,6 +125,7 @@
                     // Libro gratuito
                     priceField.disabled = true;
                     priceField.value = '0';
+                    priceHidden.value = '0'; // Actualizar el campo hidden también
                     priceField.classList.add('bg-gray-100', 'text-gray-500', 'cursor-not-allowed');
                     freeInfo.classList.remove('hidden');
                     freeBadge.classList.remove('hidden');
@@ -132,6 +138,7 @@
                 } else {
                     // Libro de pago
                     priceField.disabled = false;
+                    priceHidden.value = priceField.value; // Sincronizar con el campo visible
                     priceField.classList.remove('bg-gray-100', 'text-gray-500', 'cursor-not-allowed');
                     freeInfo.classList.add('hidden');
                     freeBadge.classList.add('hidden');
@@ -150,11 +157,21 @@
             // Escuchar cambios en el toggle
             freeToggle.addEventListener('change', toggleFreeBookState);
 
-            // También manejar el evento de entrada en el campo de precio
+            // Sincronizar el campo hidden con el campo visible cuando cambie
             priceField.addEventListener('input', function() {
+                priceHidden.value = this.value;
+
                 if (freeToggle.checked && this.value !== '0') {
                     freeToggle.checked = false;
                     toggleFreeBookState();
+                }
+            });
+
+            // Prevenir que el usuario modifique el precio cuando está deshabilitado
+            priceField.addEventListener('keydown', function(e) {
+                if (priceField.disabled) {
+                    e.preventDefault();
+                    return false;
                 }
             });
         });
