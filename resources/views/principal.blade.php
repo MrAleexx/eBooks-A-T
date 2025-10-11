@@ -16,7 +16,7 @@
         <div class="relative container mx-auto h-full flex items-center px-10">
             <div class="max-w-2xl text-white">
                 <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">
-                    Descubre el <span class="text-[#ea9216]">conocimiento</span> que transforma
+                    Descubre el <span class="text-[#ea9216]">conocimiento que</span> transforma
                 </h1>
                 <p class="text-xl md:text-2xl mb-8 text-gray-200">
                     Libros digitales educativos para tu crecimiento personal y profesional
@@ -364,7 +364,7 @@
         </div>
     </section>
 
-    
+
     <!-- Libro Destacado Section -->
     <section class="py-16 bg-white">
         <div class="container mx-auto px-4">
